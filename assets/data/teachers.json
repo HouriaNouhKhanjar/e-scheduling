@@ -1,0 +1,65 @@
+[{
+        "id": 1,
+        "username": "Beterlen",
+        "password": "password123",
+        "subject": "Math",
+        "classes": [{
+                "class_id": 1
+            },
+            {
+                "class_id": 2
+            },
+            {
+                "class_id": 3
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "username": "Marthi",
+        "password": "password456",
+        "subject": "Physic",
+        "classes": [{
+                "class_id": 1
+            },
+            {
+                "class_id": 2
+            },
+            {
+                "class_id": 3
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "username": "Josef",
+        "password": "password789",
+        "subject": "English",
+        "classes": [{
+                "class_id": 1
+            },
+            {
+                "class_id": 2
+            },
+            {
+                "class_id": 3
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "username": "Nouh",
+        "password": "password429",
+        "subject": "Chemi",
+        "classes": [{
+                "class_id": 1
+            },
+            {
+                "class_id": 2
+            },
+            {
+                "class_id": 3
+            }
+        ]
+    }
+]

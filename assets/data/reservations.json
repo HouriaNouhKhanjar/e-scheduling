@@ -1,0 +1,95 @@
+[{
+    "id": 1,
+    "teacher_id": 1,
+    "class_id": 1,
+    "assigned_completed": false,
+    "required_time_slots": 6,
+    "assigned_times_slots": {}
+},
+{
+    "id": 2,
+    "teacher_id": 1,
+    "class_id": 2,
+    "assigned_completed": false,
+    "required_time_slots": 7,
+    "assigned_times_slots": {}
+},
+{
+    "id": 3,
+    "teacher_id": 1,
+    "class_id": 3,
+    "assigned_completed": false,
+    "required_time_slots": 7,
+    "assigned_times_slots": {}
+},
+{
+    "id": 4,
+    "teacher_id": 2,
+    "class_id": 1,
+    "assigned_completed": false,
+    "required_time_slots": 5,
+    "assigned_times_slots": {}
+},
+{
+    "id": 5,
+    "teacher_id": 2,
+    "class_id": 2,
+    "assigned_completed": false,
+    "required_time_slots": 6,
+    "assigned_times_slots": {}
+},
+{
+    "id": 6,
+    "teacher_id": 2,
+    "class_id": 3,
+    "assigned_completed": false,
+    "required_time_slots": 6,
+    "assigned_times_slots": {}
+},{
+    "id": 7,
+    "teacher_id": 3,
+    "class_id": 1,
+    "assigned_completed": false,
+    "required_time_slots": 8,
+    "assigned_times_slots": {}
+},
+{
+    "id": 8,
+    "teacher_id": 3,
+    "class_id": 2,
+    "assigned_completed": false,
+    "required_time_slots": 5,
+    "assigned_times_slots": {}
+},
+{
+    "id": 9,
+    "teacher_id": 3,
+    "class_id": 3,
+    "assigned_completed": false,
+    "required_time_slots": 7,
+    "assigned_times_slots": {}
+}{
+    "id": 10,
+    "teacher_id": 4,
+    "class_id": 1,
+    "assigned_completed": false,
+    "required_time_slots": 6,
+    "assigned_times_slots": {}
+},
+{
+    "id": 11,
+    "teacher_id": 4,
+    "class_id": 2,
+    "assigned_completed": false,
+    "required_time_slots": 7,
+    "assigned_times_slots": {}
+},
+{
+    "id": 12,
+    "teacher_id": 4,
+    "class_id": 3,
+    "assigned_completed": false,
+    "required_time_slots": 5,
+    "assigned_times_slots": {}
+}
+]
