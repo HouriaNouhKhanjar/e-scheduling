@@ -8,8 +8,8 @@
     /* Curious Blue */
     --secondary-color: #57C693;
     /* Emerald */
-    --highlight-color: #edefea;
-    /* Alabaster */
+    --highlight-color: #f0f8ff;
+    /* Aliceblue */
     --highlight-color-light: #fffbf8;
     /* Quill Gray */
     --light-color: #ffffff;
@@ -27,6 +27,11 @@ h1,
 h2,
 h3 {
     font-family: var(--primary-font, serif), serif;
+}
+
+h1 {
+    color: var(--primary-color);
+    font-weight: bold !important;
 }
 
 .action-button {
@@ -63,4 +68,20 @@ h3 {
     box-shadow: 2px 3px 4px rgb(0 0 0 / 29%);
     width: 100%;
     z-index: 2;
+}
+
+/* hero */
+header {
+    margin-top: 3rem;
+    background: var(--highlight-color);
+    padding: 5rem;
+}
+
+.lead {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.hero-image img {
+    width: 96%;
 }

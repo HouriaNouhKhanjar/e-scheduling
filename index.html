@@ -27,18 +27,44 @@
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary position-fixed top-0" id="navbar">
-        <div class="container-fluid navbar-container">
+        <div class="container-fluid navbar-container px-5">
             <a class="navbar-brand" href="index.html" aria-label="Easy Rental logo (load home page on click)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
                     <text x="50%" y="50%" font-family="Roboto Mono" font-size="40" fill="#2890D0" text-anchor="middle"
                         alignment-baseline="central">ES</text>
                 </svg>
             </a>
-            <a class="nav-link ms-auto btn action-button" href="">
+            <a class="nav-link ms-auto btn action-button" aria-label="go to teachers' table and login as a teacher"
+                href="">
                 Login
             </a>
         </div>
     </nav>
+
+    <!-- Header -->
+    <header class="container-fluid">
+        <div class="row">
+            <div class="col-12 hero">
+                <h1 class="display-5 text-center">Welcome to E-Scheduling</h1>
+                <div class="d-lg-flex align-items-center py-5 px-2 px-md-5">
+                    <div class="hero-image mb-5">
+                        <img src="assets/images/hero.webp" alt="entering the schedule into the system on computer">
+                    </div>
+                    <div class="hero-content">
+                        <p class="lead">
+                            E-Scheduling is a digital tool that helps in creating and organizing lesson timetables in
+                            educational institutions by allowing the teacher to reserve his time slots in a way that is
+                            compatible with other teachers without any overlap between them.
+                            Below you can find the teachers' table, and you will be able to access to a teacher account
+                            and make modifications on behalf of him. </p>
+                        <a href="#" aria-label="go to teachers' table and login as a teacher"
+                            class="btn btn-lg action-button">Login</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
 
     <!-- link Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
