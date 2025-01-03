@@ -85,3 +85,8 @@ header {
 .hero-image img {
     width: 96%;
 }
+
+/* footer */
+footer {
+    background: var(--highlight-color);
+}
