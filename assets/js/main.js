@@ -32,7 +32,7 @@ window.onload = function () {
     const isLoggedin = loginCheck("loggedin_teacher_id");
     if(isLoggedin) {
         //redirect to teacher account, below function is declared in helper.js file
-        redirect('account.html')
+        redirect('account.html');
     }
 }
 

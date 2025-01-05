@@ -2,7 +2,7 @@
 #loader {
     position: relative;
     top: 70%;
-    left: 40%;
+    margin: auto;
     width: 120px;
     height: 20px;
     border-radius: 20px;

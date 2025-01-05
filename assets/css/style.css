@@ -74,7 +74,7 @@ h1 {
     z-index: 2;
 }
 
-/* hero */
+/* Header */
 header {
     margin-top: 3rem;
     padding: 5rem 5rem 1rem;
@@ -89,21 +89,58 @@ header {
     width: 96%;
 }
 
-/* footer */
+/* Footer */
 footer {
     background-color: var(--highlight-color-light) !important;
     box-shadow: 2px 2px 10px rgb(0 0 0 / 33%);
 }
 
-/* teachers section */
+/* Teachers section */
 #teachers-table {
     min-height: 100px;
 }
 
+/* Classes section */
+#classes-list-section .card {
+    border: unset;
+}
+
+#classes-list-section .card .card-body {
+    height: 190px;
+    width: 86%;
+    display: flex;
+    margin: auto;
+    padding: 2rem;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--primary-color);
+    border-radius: 1rem;
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    text-align: center;
+    flex-direction: column;
+}
+
+#classes-list-section .card .card-body .action-button-secondary:hover {
+    color: var(--light-color);
+    border-color: var(--light-color);
+}
+
+
 /* Brekpoint */
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+    /* Classes section */
+    #classes-list-section .card .card-body {
+        width: 75%;
+    }
+}
+
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-    /* teachers section */
+
+    /* Teachers section */
     #teachers-table {
         width: 70%;
     }
