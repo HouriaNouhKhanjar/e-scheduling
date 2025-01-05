@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /**
-     * Fetichig teachers data from teachers.json file
+     * Fetchig teachers data from teachers.json file
      * then fill teachers table on start page
      */
     function fetchTeachers() {
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             //call hideLoader function, which is declared in helper.js file to hide the loader after fetching data 
            hideLoader();
-           //after loading teachers on teachers table add event listener to login button
+           //add event listener to login button
            addEventListenerLoginButton();
         } else {
             displayTeachersNotFound();
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 //save logged in teacher's id in browser cookies, below function is declared in helper.js file
                 loggedIn("loggedin_teacher_id", teacherId);
                 //redirect to teacher account, below function is declared in helper.js file
-                redirect('account.html')
+                redirect('account.html');
               });
         }
 

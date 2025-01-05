@@ -27,6 +27,14 @@ function loggedIn(key, teacherId) {
 }
 
 /**
+ * save class id, which will modify its schedule, in browser cookies
+ */
+function modifyClassSchedule(key, classID) {
+    return setCookie(key, classID)
+}
+
+
+/**
  * Get cookie by its name
  */
 function getCookie(cname) {
