@@ -62,6 +62,10 @@ h1 {
     background: transparent;
 }
 
+.hide {
+    display: none;
+}
+
 /* Navbar */
 #navbar {
     background-color: var(--highlight-color-light) !important;
@@ -91,10 +95,15 @@ footer {
     box-shadow: 2px 2px 10px rgb(0 0 0 / 33%);
 }
 
+/* teachers section */
+#teachers-table {
+    min-height: 100px;
+}
 
 /* Brekpoint */
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
+    /* teachers section */
     #teachers-table {
         width: 70%;
     }
