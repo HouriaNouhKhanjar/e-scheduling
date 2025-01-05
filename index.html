@@ -35,7 +35,7 @@
                 </svg>
             </a>
             <a class="nav-link ms-auto btn action-button" aria-label="go to teachers' table and login as a teacher"
-                href="">
+                href="#teachers-table-section">
                 Login
             </a>
         </div>
@@ -46,7 +46,7 @@
         <div class="row">
             <div class="col-12 hero">
                 <h1 class="display-5 text-center">Welcome to E-Scheduling</h1>
-                <div class="d-lg-flex align-items-center py-5 px-2 px-md-5">
+                <div class="d-lg-flex align-items-center py-3 px-2 px-md-5">
                     <div class="hero-image mb-5">
                         <img src="assets/images/hero.webp" alt="entering the schedule into the system on computer">
                     </div>
@@ -57,8 +57,8 @@
                             compatible with other teachers without any overlap between them.
                             Below you can find the teachers' table, and you will be able to access to a teacher account
                             and make modifications on behalf of him. </p>
-                        <a href="#" aria-label="go to teachers' table and login as a teacher"
-                            class="btn btn-lg action-button">Login</a>
+                        <a href="#teachers-table-section" aria-label="go to teachers' table and login as a teacher"
+                            class="btn action-button">Login</a>
                     </div>
                 </div>
 
@@ -67,8 +67,51 @@
     </header>
 
     <!-- Main Container -->
-    <main>
-        <h2>teachers</h2>
+    <main class="container-fluid">
+        <div class="row py-5" id="teachers-table-section">
+            <div class="col-12 text-center">
+                <h2>Institute Teachers</h2>
+                <p>Select a teacher from the table below to log in to their account and edit their
+                    schedule.</p>
+
+            </div>
+            <div class="col-12 py-2 px-5">
+                <table class="table table-bordered table-striped text-center m-auto" id="teachers-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Teacher</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <tr>
+                            <th scope="row">teacher1</th>
+                            <td>
+                                <button class="btn action-button-secondary" aria-label="log into teacher1 account">
+                                    Login
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">tacher2</th>
+                            <td>
+                                <button class="btn action-button-secondary" aria-label="log into teacher2 account">
+                                    Login
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">teacher3</th>
+                            <td colspan="2">
+                                <button class="btn action-button-secondary" aria-label="log into teacher3 account">
+                                    Login
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
