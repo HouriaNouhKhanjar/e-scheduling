@@ -1,8 +1,6 @@
 {
     "days": ["Monday", "Tuesday","Wednesday", "Thursday", "Friday"],
     "time_slots": ["08:00-09:00", "09:00-10:00", "10:00-11:00", "11:00-12:00", "12:00-13:00"],
-    "is_loggedin": false,
-    "loggedin_teacher_id": null,
     "can_disable_modification": false,
     "disable_modification": false
 }

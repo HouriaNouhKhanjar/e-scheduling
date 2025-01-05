@@ -4,7 +4,9 @@
  * Redirect to pageName
  */
 function redirect(pageName){
+    //get the current url and replace the last element with page name
     const newLocation = window.location.href.replace(/\/[^\/]*$/, `/${pageName}`);
+    //replace the new url
     window.location.replace(newLocation);
 }
 
@@ -51,7 +53,7 @@ function setCookie(cname, cvalue) {
 }
 
 /**
- * Feting Data from JSON File
+ * Fetching Data from JSON File
  * Input: fileName is a string parameter
  */
 function fetchJsonFile(fileName) {
