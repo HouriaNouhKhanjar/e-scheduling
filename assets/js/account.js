@@ -3,8 +3,8 @@
  * 
  * This file will control the account page (account.html) 
  * 1. Ensure that a teacher is logged in by checking the value 
- *    of the variable (loggedin_teacher_id) from the browser cookies.
- *    If the loggedin_teacher_id is null, it will redirect the user to start page (index.html). 
+ *    of the variable (loggedin_teacher) from the browser storage.
+ *    If the loggedin_teacher is null, it will redirect the user to start page (index.html). 
  * 
  * 
  * 2. After the documet content loaded 
@@ -13,24 +13,35 @@
  * 
  * 3. add event listener to Modify Schedule button, 
  *    when a Modify Schedule button clicked, it will take
- *    the user to schedule page
+ *    the user to schedule page.
  * 
  * 
+ * 4. Add event listener to logout button
+ *    when logout button clicked then the user will be
+ *    redirected to start page and the (loggedin_teacher) will be removed from storage
  * 
  */
+
+
+
 
 /**
  * call function (loginCheck), which is declared in helper.js file 
  * before fetching the classes data.
- * If the loggedin_teacher_id is null, it will redirect the user to start page. 
+ * If the loggedin_teacher is null, it will redirect the user to start page. 
  */
 window.onload = function () {
-    //call loginCheck function with loggedin_teacher_id key to chaeck if this key appers in browser cookies
-    const isLoggedin = loginCheck("loggedin_teacher_id");
-    if (!isLoggedin) {
-        //redirect to teacher account, below function is declared in helper.js file
-        redirect('index.html');
-    }
+    //call loginCheck function with loggedin_teacher parameter to check the teacher in browser storage
+    loginCheck("loggedin_teacher", function (isLoggedIn) {
+        deleteItemFromStorage('class');
+        if (!isLoggedIn) {
+            //redirect to teacher account, below function is declared in helper.js file
+            redirect('index.html');
+        } else {
+            // remove class to make sure that no class id is saved
+            deleteItemFromStorage('class');
+        }
+    });
 }
 
 /**
@@ -42,45 +53,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // fetch data from teachers.json and classes.json files then fill classes list section on account page
     fetchData();
+    // add event listener to logout button 
+    addEventListenerlogoutButton();
 
 
 
     /**
-     * Fetchig teachers and classes data from teachers.json file
-     * get the logged in teacher object according to the loggedin_teacher_id, which is saved in browser cookies
+     * Fetchig teachers and classes data 
+     * get the logged in teacher object according to the loggedin_teacher, which is saved in browser storage
      * display teacher name on the header of account page
      * call fetchClasses function to get the classes
      */
     function fetchData() {
-        // call the fetchJsonFile function, which is declared in helper.js file , to fetch teachers from teachers.json file
-        fetchJsonFile("teachers.json").then((data) => {
-                /* get logged in user id from browser cookie,
-                 * loginCheck function is declared in helper.json file will retun loggedin teacher id.
-                 */
-                const loggedinTeacherId = loginCheck("loggedin_teacher_id");
-                if (loggedinTeacherId) {
-                    // get teacher object by id
-                    const teacher = getTeacherByID(loggedinTeacherId, data);
-                    // display teacher name on the header of account page
-                    displayTeacherName(teacher);
 
-                    // call fetchClasses function to fetch classes from json file
-                    fetchClasses(teacher);
-                } else {
-                    displayClassesNotFound();
-                    throw `cannot find teacher with id ${loggedinTeacherId}`
-                }
+        /* get logged in teacher id from browse storage,
+         * loginCheck function is declared in helper.json file will retun loggedin teacher id.
+         */
+        const loggedinTeacher = getItemFromStorage('loggedin_teacher');
+        if (loggedinTeacher) {
+            // display teacher name on the header of account page
+            displayTeacherName(loggedinTeacher);
 
-            })
-            .catch((error) => {
-                displayTeacherNotFound();
-                throw `Unable to fetch data:", ${error}`;
-            });
+            // call fetchClasses function to fetch classes from json file
+            fetchClasses(loggedinTeacher);
+        } else {
+            displayTeacherNotFound();
+            displayClassesNotFound();
+            throw `cannot find teacher with id ${loggedinTeacherId}`
+        }
     }
 
     /**
      * Fetchig classes by reading classes.json file
-     * filter classes according to teacher_id
+     * filter classes according to loggedinTeacher.id
      * then fill classes list on account page
      */
     function fetchClasses(teacher) {
@@ -109,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function fillClassesList(classes) {
         if (classes && classes.length) {
+            setItemInStorage('classes', classes);
             let classesList = document.querySelector("#classes-list-section");
             for (let classObj of classes) {
                 let element = document.createElement("div");
@@ -136,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /**
-     * add event listener to Modify Schedule button
+     * event listener to Modify Schedule button
      */
     function addEventListenerModifyScheduleButton() {
         let modifyScheduleButtons = document.querySelectorAll("#classes-list-section .modify-schedule");
@@ -144,8 +150,11 @@ document.addEventListener("DOMContentLoaded", function () {
             button.addEventListener("click", function (e) {
                 //get classes's id from attribute data-class-id
                 const classId = e.target.getAttribute("data-class-id");
-                //save class id in browser cookies, below function is declared in helper.js file
-                modifyClassSchedule("class_id", classId);
+                const classObj = getItemFromStorage('classes').find((cls) => cls.id == classId);
+                //save class in browser storage, below function is declared in helper.js file
+                setItemInStorage("class", classObj);
+                // remove classes from storage
+                deleteItemFromStorage('classes');
                 //redirect to teacher account, below function is declared in helper.js file
                 redirect('schedule.html');
             });
@@ -154,28 +163,30 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /**
+     * event listener to logout button
+     */
+    function addEventListenerlogoutButton() {
+        let logoutButton = document.getElementById("logout");
+        logoutButton.addEventListener("click", function () {
+            //logout is declared in helper.js file
+            logout(redirect, 'index.html');
+        });
+    }
+
+
+    /**
      * return teacher's classes
      */
     function filterClassesByTeacher(teacher, classes) {
         let filterdClasses = [];
         if (teacher && teacher.classes && teacher.classes.length) {
             for (let classObj of classes) {
-                if (teacher.classes.find((cl) => cl.class_id === classObj.id)) {
+                if (teacher.classes.find((cl) => cl["class_id"] == classObj.id)) {
                     filterdClasses.push(classObj);
                 }
             }
         }
         return filterdClasses;
-    }
-
-    /**
-     * return the logged in teacher object by his Id
-     */
-    function getTeacherByID(id, teachers) {
-        if (teachers && teachers.length) {
-            return teachers.find((te) => parseInt(te.id) === parseInt(id));
-        }
-        return null;
     }
 
     /**

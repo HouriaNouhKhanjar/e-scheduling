@@ -3,61 +3,81 @@
 /**
  * Redirect to pageName
  */
-function redirect(pageName){
+function redirect(pageName) {
     //get the current url and replace the last element with page name
     const newLocation = window.location.href.replace(/\/[^\/]*$/, `/${pageName}`);
     //replace the new url
     window.location.replace(newLocation);
 }
 
-
-
 /**
- * check if any teacher was logged in
+ * Check if any teacher was logged in
  */
-function loginCheck(key) {
-    return getCookie(key)
+function loginCheck(key, callback) {
+    const loggedinTeacher = getItemFromStorage(key);
+    callback(loggedinTeacher);
 }
 
 /**
- * save loggedIn teacher id in browser cookies
+ * check if any teacher is logged in and if any 
+ * class is chosen
+ * @param {*} keys
+ * @param {*} callback 
+ * 
  */
-function loggedIn(key, teacherId) {
-    return setCookie(key, teacherId)
-}
-
-/**
- * save class id, which will modify its schedule, in browser cookies
- */
-function modifyClassSchedule(key, classID) {
-    return setCookie(key, classID)
-}
-
-
-/**
- * Get cookie by its name
- */
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
+function loginAndClassCheck(keys, callback) {
+    if (keys && keys.length === 2) {
+        const loggedinTeacher = getItemFromStorage(keys[0]);
+        const classObj = getItemFromStorage(keys[1]);
+        callback(loggedinTeacher, classObj);
+    } else {
+        throw `Error in keys list, checking if the logged in teacher and class are in storage`;
     }
-    return null;
 }
 
 /**
- * Set cookie
+ * Save loggedIn teacher in browser storage
  */
-function setCookie(cname, cvalue) {
-    document.cookie = cname + "=" + cvalue + ";path=/";
+function loggedIn(key, teacher, itemToRemove, pageName, callback) {
+    setItemInStorage(key, teacher);
+    deleteItemFromStorage(itemToRemove);
+    callback(pageName);
+}
+
+/**
+ * logout and reset all elements in browser storage
+ */
+function logout(callback, parameter) {
+    clearStorage();
+    callback(parameter);
+}
+
+/**
+ * Get storaged item by its name
+ */
+function getItemFromStorage(cname) {
+    return JSON.parse(localStorage.getItem(cname));
+}
+
+/**
+ * Set item in strorage
+ */
+function setItemInStorage(cname, cvalue) {
+    localStorage.setItem(cname, JSON.stringify(cvalue));
+}
+
+/**
+ * Delete storage item
+ */
+function deleteItemFromStorage(cname) {
+    localStorage.removeItem(cname);
+}
+
+/**
+ * Clear storage items
+ */
+function clearStorage() {
+    localStorage.clear();
 }
 
 /**
@@ -74,7 +94,6 @@ function fetchJsonFile(fileName) {
         });
 }
 
-
 /**
  * Hide the loader
  */
@@ -82,4 +101,3 @@ function hideLoader() {
     let loader = document.getElementById("loader");
     loader.classList.add("hide");
 }
-
