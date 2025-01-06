@@ -112,10 +112,10 @@ document.addEventListener("DOMContentLoaded", function () {
             let classesList = document.querySelector("#classes-list-section");
             for (let classObj of classes) {
                 let element = document.createElement("div");
-                element.classList.add("col-12", "col-md-6", "col-xl-3", "my-2");
+                element.classList.add("col-12", "col-md-6", "col-xl-4");
                 element.innerHTML = ` <div class="card">
                     <div class="card-body">
-                      <p>${classObj.name}</p>
+                      <h3>${classObj.name}</h3>
                       <button class="btn action-button-secondary modify-schedule" 
                               data-class-id="${classObj.id}"
                                         aria-label="modify schedule for class ${classObj.name}">
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let filterdClasses = [];
         if (teacher && teacher.classes && teacher.classes.length) {
             for (let classObj of classes) {
-                if (teacher.classes.filter((cl) => cl.class_id === classObj.id)) {
+                if (teacher.classes.find((cl) => cl.class_id === classObj.id)) {
                     filterdClasses.push(classObj);
                 }
             }

@@ -40,6 +40,7 @@ h1 {
     color: var(--light-color);
     border-radius: 5px;
     padding: 0.5rem;
+    box-shadow: 2px 3px 4px rgb(0 0 0 / 29%);
 }
 
 .action-button-secondary {
@@ -48,6 +49,7 @@ h1 {
     border: unset;
     border-radius: 5px;
     padding: 0.5rem;
+    box-shadow: 2px 3px 4px rgb(0 0 0 / 29%);
 }
 
 .action-button:hover {
@@ -103,14 +105,14 @@ footer {
 /* Classes section */
 #classes-list-section .card {
     border: unset;
+    padding: 1rem 0;
 }
 
 #classes-list-section .card .card-body {
-    height: 190px;
-    width: 86%;
+    height: 300px;
     display: flex;
     margin: auto;
-    padding: 2rem;
+    padding: 2rem 3rem;
     justify-content: center;
     align-items: center;
     border: 1px solid var(--primary-color);
@@ -119,6 +121,7 @@ footer {
     color: var(--light-color);
     text-align: center;
     flex-direction: column;
+    box-shadow: 2px 5px 8px rgb(0 0 0 / 30%);
 }
 
 #classes-list-section .card .card-body .action-button-secondary:hover {
@@ -132,8 +135,11 @@ footer {
 @media only screen and (min-width: 600px) {
 
     /* Classes section */
+    #classes-list-section .card {
+        padding: 2rem 0;
+    }
     #classes-list-section .card .card-body {
-        width: 75%;
+        padding: 2rem 5rem;
     }
 }
 
@@ -142,6 +148,6 @@ footer {
 
     /* Teachers section */
     #teachers-table {
-        width: 70%;
+        width: 80%;
     }
 }

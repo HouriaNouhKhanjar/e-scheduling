@@ -1,69 +1,52 @@
 [{
-    "id": 1,
-    "name": "Class One",
-    "teachers": [{
-            "teacher_id": 1
-        },
-        {
-            "teacher_id": 2
-        },
-        {
-            "teacher_id": 3
-        },
-        {
-            "teacher_id": 4
-        }
-    ]
-},
-{
-    "id": 2,
-    "name": "Class Two",
-    "teachers": [{
-            "teacher_id": 1
-        },
-        {
-            "teacher_id": 2
-        },
-        {
-            "teacher_id": 3
-        },
-        {
-            "teacher_id": 4
-        }
-    ]
-},
-{
-    "id": 3,
-    "name": "Class Three",
-    "teachers": [{
-            "teacher_id": 1
-        },
-        {
-            "teacher_id": 2
-        },
-        {
-            "teacher_id": 3
-        },
-        {
-            "teacher_id": 4
-        }
-    ]
-},
-{
-    "id": 4,
-    "name": "Class Four",
-    "teachers": [{
-            "teacher_id": 1
-        },
-        {
-            "teacher_id": 2
-        },
-        {
-            "teacher_id": 3
-        },
-        {
-            "teacher_id": 4
-        }
-    ]
-}
+        "id": 1,
+        "name": "Class One",
+        "teachers": [{
+                "teacher_id": 1
+            },
+            {
+                "teacher_id": 2
+            },
+            {
+                "teacher_id": 3
+            },
+            {
+                "teacher_id": 4
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Class Two",
+        "teachers": [{
+                "teacher_id": 1
+            },
+            {
+                "teacher_id": 2
+            },
+            {
+                "teacher_id": 3
+            },
+            {
+                "teacher_id": 4
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Class Three",
+        "teachers": [{
+                "teacher_id": 1
+            },
+            {
+                "teacher_id": 2
+            },
+            {
+                "teacher_id": 3
+            },
+            {
+                "teacher_id": 4
+            }
+        ]
+    }
 ]
