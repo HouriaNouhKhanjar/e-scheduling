@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const teacherId = e.target.getAttribute("data-teacher-id");
                 const loggedInTeacher = getItemFromStorage("teachers").find((teacher) => teacher.id == teacherId);
                 //save logged in teacher's id in storage, below function is declared in helper.js file
-                loggedIn("loggedin_teacher", loggedInTeacher, 'teachers', 'account.html', redirect);
+                loggedIn("loggedin_teacher", loggedInTeacher, ['teachers'], 'account.html', redirect);
             });
         }
 

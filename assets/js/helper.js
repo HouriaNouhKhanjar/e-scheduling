@@ -21,9 +21,6 @@ function loginCheck(key, callback) {
 /**
  * check if any teacher is logged in and if any 
  * class is chosen
- * @param {*} keys
- * @param {*} callback 
- * 
  */
 function loginAndClassCheck(keys, callback) {
     if (keys && keys.length === 2) {
@@ -38,9 +35,9 @@ function loginAndClassCheck(keys, callback) {
 /**
  * Save loggedIn teacher in browser storage
  */
-function loggedIn(key, teacher, itemToRemove, pageName, callback) {
+function loggedIn(key, teacher, itemsToRemove, pageName, callback) {
     setItemInStorage(key, teacher);
-    deleteItemFromStorage(itemToRemove);
+    itemsToRemove.every(deleteItemFromStorage);
     callback(pageName);
 }
 

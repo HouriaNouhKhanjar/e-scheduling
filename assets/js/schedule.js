@@ -40,10 +40,10 @@
  */
 window.onload = function () {
     //call loginAndClassCheck function with loggedin_teacher parameter to check the teacher and class in browser storage
-    loginAndClassCheck(["loggedin_teacher", "class"], function (isLoggedIn, isClass) {
+    loginAndClassCheck(["loggedin_teacher", "class"], function (isLoggedIn, isClassChosen) {
         if (!isLoggedIn) {
             redirect('index.html');
-        } else if (!isClass) {
+        } else if (!isClassChosen) {
             redirect('account.html');
         }
     });
