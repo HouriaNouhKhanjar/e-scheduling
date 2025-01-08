@@ -33,13 +33,11 @@
 window.onload = function () {
     //call loginCheck function with loggedin_teacher parameter to check the teacher in browser storage
     loginCheck("loggedin_teacher", function (isLoggedIn) {
-        deleteItemFromStorage('class');
+        // remove class and reservations from storage
+        removeItemsFromStorage(['class', 'settings', 'class_reservations', 'teacher_reservations', 'teacher_class_reservation']);
         if (!isLoggedIn) {
             //redirect to teacher account, below function is declared in helper.js file
             redirect('index.html');
-        } else {
-            // remove class to make sure that no class id is saved
-            deleteItemFromStorage('class');
         }
     });
 }
@@ -188,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let teacherNameElement = document.getElementById("teacher-name");
         let displayedText = "Teacher not found"
         if (teacher) {
-            teacherNameElement.innerText = teacher.username;
+            displayedText = teacher.username;
         }
         teacherNameElement.innerText = displayedText;
     }

@@ -135,6 +135,7 @@ footer {
     text-align: center;
     background-color: var(--secondary-color);
     color: var(--light-color);
+    text-transform: capitalize;
 }
 
 
@@ -144,6 +145,15 @@ footer {
     padding: 2rem;
     text-align: center;
     border: 1px solid var(--dark-color);
+    max-height: 100px;
+    min-height: 100px;
+    font-size: small;
+}
+
+#reservations-list-section .times .time:first-child {
+    max-height: unset;
+    min-height: unset;
+    font-size: inherit;
 }
 
 #reservations-list-section .day .time-slots .slot:hover{

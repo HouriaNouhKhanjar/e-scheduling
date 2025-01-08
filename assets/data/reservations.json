@@ -68,7 +68,8 @@
     "assigned_completed": false,
     "required_time_slots": 7,
     "assigned_times_slots": {}
-}{
+},
+{
     "id": 10,
     "teacher_id": 4,
     "class_id": 1,

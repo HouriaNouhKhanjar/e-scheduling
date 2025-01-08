@@ -56,9 +56,12 @@ window.onload = function () {
  */
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Enable tooltips
+
+    // Enable tooltips to display conditions rule on schedule header
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+
 
     // add event listener to logout button 
     addEventListenerlogoutButton();
@@ -73,6 +76,8 @@ document.addEventListener("DOMContentLoaded", function () {
             logout(redirect, 'index.html');
         });
     }
+
+
 
 
     // fetch data from reservations.json files then fill time slots section on schedule page
@@ -96,8 +101,19 @@ document.addEventListener("DOMContentLoaded", function () {
             // display teacher name on the header of schedule page
             displayClassName(chosenClass);
             if (chosenClass) {
-                // call fetchClasses function to fetch reservations from json file
-                // fetchClasses(loggedinTeacher);
+                //fetch settings data from settings.json file
+                fetchJsonFile("settings.json").then((settings) => {
+
+                        // store settings in storage
+                        setItemInStorage("settings", settings);
+                        // fetch reservations data 
+                        fetchReservations(loggedinTeacher, chosenClass, settings);
+
+                    })
+                    .catch((error) => {
+                        throw `Unable to fetch data:", ${error}`;
+                    });
+
             } else {
                 hideLoader();
                 throw `cannot find the chosen class`;
@@ -109,9 +125,161 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    // Fetching reservations from reservations.json file and display the data
+    function fetchReservations(teacher, classObj, settings) {
+        // call the fetchJsonFile function, which is declared in helper.js file , to fetch classes from classes.json file
+        fetchJsonFile("reservations.json").then((data) => {
+                //filter reservations
+                const reservations = filterReservations(teacher, classObj, data);
+                // fill  time slots
+                fillTimeSlotsTable(reservations, settings);
+            })
+            .catch((error) => {
+                displayReservationsNotFound();
+                throw `Unable to fetch data:", ${error}`;
+            });
+    }
+
+
+    /**
+     * Filter reservation according to teacher and class
+     */
+    function filterReservations(teacher, classObj, reservations) {
+        let teacherReservations = [];
+        let classReservations = [];
+        let teacherClassReservation = [];
+
+        //  filter the reservation that contains teacher id or class id or both
+        reservations.every((res) => {
+            if (res.teacher_id == teacher.id && res.class_id == classObj.id) {
+                teacherClassReservation.push(res);
+            } else if (res.teacher_id == teacher.id) {
+                teacherReservations.push(res);
+            } else if (res.class_id == classObj.id) {
+                classReservations.push(res);
+            }
+            return res;
+        });
+        setItemInStorage("teacher_reservations", teacherReservations)
+        setItemInStorage("class_reservations", classReservations);
+        setItemInStorage("teacher_class_reservation", teacherClassReservation);
+
+        return [teacherReservations, classReservations, teacherClassReservation];
+    }
+
+    /**
+     * Fill time slots table on schedule page
+     */
+    function fillTimeSlotsTable(reservations, settings) {
+        if (reservations && reservations.length) {
+            // Get the reservation related for teacher and class
+            const teacherClassReservation = reservations[2][0];
+            // display lessons count
+            displayLessonsCount(teacherClassReservation);
+            if (settings && settings.days && settings.time_slots) {
+                let reservationsList = document.querySelector("#reservations-list-section");
+                // create container elemnt for reservation section
+                const containerElement = createReservationContainerElement(reservations, settings,
+                    teacherClassReservation.teacher_id, teacherClassReservation.class_id);
+
+
+                reservationsList.appendChild(containerElement);
+                //call hideLoader function, which is declared in helper.js file to hide the loader after displaying data 
+                hideLoader();
+                //add event listener to Select slot button
+            } else {
+                displayReservationsNotFound();
+            }
+        } else {
+            displayReservationsNotFound();
+        }
+    }
+
+    /**
+     * Create reservation container elment
+     */
+    function createReservationContainerElement(reservations, settings, teacher, classObj) {
+
+        // create the container element
+        let containerElement = document.createElement("div");
+        containerElement.classList.add("col-12");
+
+        // acreate the row element, the parent for days and time slots
+        let rowElement = document.createElement("div");
+        rowElement.classList.add("row");
+
+        // add time slots element on large devices
+        rowElement.innerHTML = `<div class="times col-lg-2 d-none d-lg-block">
+                                            <div class="time">Times</div>
+                                             ${createTimesHtml(settings)}
+                                        </div>`;
+
+
+        //create days element  and add it to the row element
+        createDaysHtml(rowElement, settings, teacher, classObj);
+
+        //add the row element which containes the times and days to container element
+        containerElement.appendChild(rowElement);
+        return containerElement;
+    }
+
+    /**
+     * create the Html element  to display the days on reservations section on schedule page
+     */
+    function createDaysHtml(rowElement, settings, teacher, classObj) {
+
+        // for each day display the day name, the time slots in small devices, and the slot related to day and time slot
+        for (let day of settings.days) {
+            // display day name
+            let dayElement = document.createElement("div");
+            dayElement.classList.add("col-12", "col-lg-2", "day");
+            dayElement.innerHTML = `<div class="day-name">${day}</div>`;
+
+            // display time slots element in small devices
+            let timesElement = document.createElement("div");
+            timesElement.classList.add("d-flex");
+            timesElement.innerHTML = `<div class="d-lg-none">
+                        ${createTimesHtml(settings)}
+                    </div>`;
+
+            // display  a clickable slot element related to day, time, teacher, class 
+            // for each slot declared in settings
+            let timeSlotsElement = document.createElement("div");
+            timeSlotsElement.classList.add("time-slots", "flex-grow-1");
+            let timeSlotsHtml = '';
+            for (let time of settings.time_slots) {
+                timeSlotsHtml += `<div class="slot" data-day="${day}" data-time-slot="${time}" 
+                                       data-teacher="${teacher}" 
+                                       data-class="${classObj}">
+                                          select
+                                   </div>`
+            }
+            timeSlotsElement.innerHTML = timeSlotsHtml;
+
+            // add slot elements to time slots section on day element
+            timesElement.appendChild(timeSlotsElement);
+            // add time slots element to day element
+            dayElement.appendChild(timesElement);
+
+            //add the day element to row element
+            rowElement.appendChild(dayElement);
+        }
+
+    }
+
+    /**
+     * 
+     * create times html to display on the reservations section on schedule page
+     */
+    function createTimesHtml(settings) {
+        // get all time slots from settings and display them
+        let timeSlots = "";
+        settings.time_slots.every((time) => timeSlots += `<div class="time">${time}</div>`);
+        return timeSlots
+    }
 
     /*
-     * display teacher name on the header of schedule page
+     * Display teacher name on the header of schedule page
      */
     function displayTeacherName(teacher) {
         let teacherNameElement = document.getElementById("teacher-name");
@@ -123,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /*
-     * display class name on the header of schedule page
+     * Display class name on the header of schedule page
      */
     function displayClassName(chosenClass) {
         let classNameElement = document.getElementById("class-name");
@@ -132,6 +300,30 @@ document.addEventListener("DOMContentLoaded", function () {
             displayedText = chosenClass.name;
         }
         classNameElement.innerText = displayedText;
+    }
+
+    /*
+     * Display reservations not found on reservations section
+     */
+    function displayReservationsNotFound() {
+        let reservationsElement = document.getElementById("reservations-list-section");
+        let element = document.createElement("div");
+        element.classList.add("col-12", "text-center");
+        element.innerText = "Reservations not found";
+        reservationsElement.appendChild(element);
+        hideLoader();
+    }
+
+    /*
+     * Display lessons count
+     */
+    function displayLessonsCount(teacherClassReservation) {
+        let lessonCountElement = document.getElementById("lessons-count");
+        let displayedText = 0;
+        if (teacherClassReservation) {
+            displayedText = teacherClassReservation.required_time_slots;
+        }
+        lessonCountElement.innerText = displayedText;
     }
 
 
