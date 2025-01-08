@@ -129,6 +129,32 @@ footer {
     border-color: var(--light-color);
 }
 
+/* Schedule reservations section */
+#reservations-list-section .day .day-name{
+    padding: 2rem;
+    text-align: center;
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+}
+
+
+#reservations-list-section .day .time-slots .slot,
+#reservations-list-section .times .time,
+#reservations-list-section .day .time {
+    padding: 2rem;
+    text-align: center;
+    border: 1px solid var(--dark-color);
+}
+
+#reservations-list-section .day .time-slots .slot:hover{
+    background-color: var(--primary-color);
+    color: var(--light-color);
+}
+
+#reservations-list-section .day .time-slots .slot-disabled{
+    background-color: var(--highlight-color);
+}
+
 /* Brekpoint */
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
