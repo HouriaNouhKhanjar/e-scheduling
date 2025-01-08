@@ -147,12 +147,12 @@ document.addEventListener("DOMContentLoaded", function () {
     function filterReservations(teacher, classObj, reservations) {
         let teacherReservations = [];
         let classReservations = [];
-        let teacherClassReservation = [];
+        let teacherClassReservation = null;
 
         //  filter the reservation that contains teacher id or class id or both
         reservations.every((res) => {
             if (res.teacher_id == teacher.id && res.class_id == classObj.id) {
-                teacherClassReservation.push(res);
+                teacherClassReservation = res;
             } else if (res.teacher_id == teacher.id) {
                 teacherReservations.push(res);
             } else if (res.class_id == classObj.id) {
@@ -164,16 +164,20 @@ document.addEventListener("DOMContentLoaded", function () {
         setItemInStorage("class_reservations", classReservations);
         setItemInStorage("teacher_class_reservation", teacherClassReservation);
 
-        return [teacherReservations, classReservations, teacherClassReservation];
+        return {
+            "teacherReservations": teacherReservations,
+            "classReservations": classReservations,
+            "teacherClassReservation": teacherClassReservation
+        };
     }
 
     /**
      * Fill time slots table on schedule page
      */
     function fillTimeSlotsTable(reservations, settings) {
-        if (reservations && reservations.length) {
+        if (reservations && reservations.teacherClassReservation) {
             // Get the reservation related for teacher and class
-            const teacherClassReservation = reservations[2][0];
+            const teacherClassReservation = reservations.teacherClassReservation;
             // display lessons count
             displayLessonsCount(teacherClassReservation);
             if (settings && settings.days && settings.time_slots) {
@@ -216,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         //create days element  and add it to the row element
-        createDaysHtml(rowElement, settings, teacher, classObj);
+        createDaysHtml(rowElement, settings, reservations, teacher, classObj);
 
         //add the row element which containes the times and days to container element
         containerElement.appendChild(rowElement);
@@ -226,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * create the Html element  to display the days on reservations section on schedule page
      */
-    function createDaysHtml(rowElement, settings, teacher, classObj) {
+    function createDaysHtml(rowElement, settings, reservations, teacher, classObj) {
 
         // for each day display the day name, the time slots in small devices, and the slot related to day and time slot
         for (let day of settings.days) {
@@ -248,10 +252,13 @@ document.addEventListener("DOMContentLoaded", function () {
             timeSlotsElement.classList.add("time-slots", "flex-grow-1");
             let timeSlotsHtml = '';
             for (let time of settings.time_slots) {
-                timeSlotsHtml += `<div class="slot" data-day="${day}" data-time-slot="${time}" 
+                // Check the slot if it is already occupied or selected from the teacher him self
+                const slotClasses = getSlotClasses(reservations, day, time);
+
+                timeSlotsHtml += `<div class="slot ${slotClasses.classes}" data-day="${day}" data-time-slot="${time}" 
                                        data-teacher="${teacher}" 
                                        data-class="${classObj}">
-                                          select
+                                          ${slotClasses.message}
                                    </div>`
             }
             timeSlotsElement.innerHTML = timeSlotsHtml;
@@ -276,6 +283,51 @@ document.addEventListener("DOMContentLoaded", function () {
         let timeSlots = "";
         settings.time_slots.every((time) => timeSlots += `<div class="time">${time}</div>`);
         return timeSlots
+    }
+
+
+    /**
+     *  Check the slot if is already occupied or selcted from the teache himself
+     */
+    function getSlotClasses(reservations, day, time) {
+
+        // if no conditions met
+        //then the slot is active and the user can select the slot
+        let classList = "slot-active";
+        let message = "select";
+
+        // check if the slot is selected from other teachers
+        const selectedFromTeacher = reservations.classReservations.filter((res) =>
+            res.times_slots && res.times_slots[day] &&
+            res.times_slots[day].length && res.times_slots[day].includes(time)
+        );
+
+        // check if the slot is selected for another class
+        const selectedForClass = reservations.teacherReservations.filter((res) =>
+            res.times_slots && res.times_slots[day] &&
+            res.times_slots[day].length && res.times_slots[day].includes(time));
+
+        // check if the slot is selected for this class from the teacher himself
+        const timeSlotes = reservations.teacherClassReservation.times_slots;
+        const selectedFromTeacherClass = timeSlotes && timeSlotes[day] && timeSlotes[day].length ?
+            timeSlotes[day].includes(time) : null;
+
+        if (selectedFromTeacher && selectedFromTeacher.length) {
+            classList = "slot-disabled";
+            message = " Reserved by another teacher ";
+        }
+        if (selectedForClass && selectedForClass.length) {
+            classList = "slot-disabled";
+            message += " \n Reserved for another class ";
+        }
+        if (selectedFromTeacherClass) {
+            classList = "selected";
+            message = "remove selection";
+        }
+        return {
+            "classes": classList,
+            "message": message
+        };
     }
 
     /*

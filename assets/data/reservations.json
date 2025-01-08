@@ -4,7 +4,7 @@
     "class_id": 1,
     "assigned_completed": false,
     "required_time_slots": 6,
-    "assigned_times_slots": {}
+    "times_slots": {}
 },
 {
     "id": 2,
@@ -12,7 +12,9 @@
     "class_id": 2,
     "assigned_completed": false,
     "required_time_slots": 7,
-    "assigned_times_slots": {}
+    "times_slots": {
+        "monday": ["09:00-10:00"] 
+    }
 },
 {
     "id": 3,
@@ -20,7 +22,7 @@
     "class_id": 3,
     "assigned_completed": false,
     "required_time_slots": 7,
-    "assigned_times_slots": {}
+    "times_slots": {}
 },
 {
     "id": 4,
@@ -28,7 +30,7 @@
     "class_id": 1,
     "assigned_completed": false,
     "required_time_slots": 5,
-    "assigned_times_slots": {}
+    "times_slots": {}
 },
 {
     "id": 5,
@@ -36,7 +38,10 @@
     "class_id": 2,
     "assigned_completed": false,
     "required_time_slots": 6,
-    "assigned_times_slots": {}
+    "times_slots": {
+        "wednesday": ["09:00-10:00"],
+        "friday": ["11:00-12:00"]
+    }
 },
 {
     "id": 6,
@@ -44,14 +49,14 @@
     "class_id": 3,
     "assigned_completed": false,
     "required_time_slots": 6,
-    "assigned_times_slots": {}
+    "times_slots": {}
 },{
     "id": 7,
     "teacher_id": 3,
     "class_id": 1,
     "assigned_completed": false,
     "required_time_slots": 8,
-    "assigned_times_slots": {}
+    "times_slots": {}
 },
 {
     "id": 8,
@@ -59,7 +64,7 @@
     "class_id": 2,
     "assigned_completed": false,
     "required_time_slots": 5,
-    "assigned_times_slots": {}
+    "times_slots": {}
 },
 {
     "id": 9,
@@ -67,7 +72,7 @@
     "class_id": 3,
     "assigned_completed": false,
     "required_time_slots": 7,
-    "assigned_times_slots": {}
+    "times_slots": {}
 },
 {
     "id": 10,
@@ -75,7 +80,9 @@
     "class_id": 1,
     "assigned_completed": false,
     "required_time_slots": 6,
-    "assigned_times_slots": {}
+    "times_slots": {
+        "tuesday": ["10:00-11:00"] 
+    }
 },
 {
     "id": 11,
@@ -83,7 +90,9 @@
     "class_id": 2,
     "assigned_completed": false,
     "required_time_slots": 7,
-    "assigned_times_slots": {}
+    "times_slots": {
+        "tuesday": ["09:00-10:00"] 
+    }
 },
 {
     "id": 12,
@@ -91,6 +100,8 @@
     "class_id": 3,
     "assigned_completed": false,
     "required_time_slots": 5,
-    "assigned_times_slots": {}
+    "times_slots": {
+        "monday": ["09:00-10:00", "08:00-09:00"] 
+    }
 }
 ]
