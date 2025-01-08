@@ -44,18 +44,36 @@
     <header class="container-fluid">
         <div class="row">
             <div class="col-12 hero">
-                <h1 class="display-5 text-center">Welcome back <span id="teacher-name"></span></h1>
+                <h1 class="display-5 text-center">Teacher <span id="teacher-name"></span> Schedule for class: <span
+                        id="class-name"></span></h1>
+            </div>
+            <div class="col-12 lead text-center px-4">
+                <p>The total number of classes to be given for this class is <span id="lessons-count ">5</span>. Don't
+                    forget to save the changes after you're done.
+                    <i class="fa-solid fa-circle-question" id="conditions-list" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                        data-bs-title="<div>
+                            <strong>Modification rules</strong> <br>
+                            <ol>
+                                <li>You can reserve the time slot if none of the other teachers have reserved it until that moment. </li>
+                                <li>You can reserve the time slot if it has not already been reserved for the other classes you teach. </li>
+                                <li>You can make the modification as long as the administrator has not activated the cancellation of the modification. </li>
+                                <li>you can cancel the time slot reservation. </li>
+                            </ol></div>">
+                    </i>
+                </p>
             </div>
         </div>
     </header>
 
     <!-- Main Container -->
     <main class="container-fluid">
-        <div class="row py-5" id="classes-list-section">
-            <div class="col-12 text-center">
-                <h2>Your Schedule </h2>
+        <div class="row py-5" id="reservations-list-section">
+            <div class="col-12 py-2 px-5">
+                <!-- While loading the data, display the loader and when finished, hide the loader by adding a hide class to it-->
+                <div id="loader"></div>
             </div>
-
+            <!-- reservations table will be added by schedule.js  -->
         </div>
     </main>
 
@@ -69,7 +87,8 @@
             </div>
         </div>
     </footer>
-
+    <!-- Popper min js -->
+    <script src="assets/js/popper.min.js"></script>
     <!-- link Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">

@@ -51,12 +51,23 @@ window.onload = function () {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // fetch data from teachers.json and classes.json files then fill classes list section on account page
-    fetchData();
     // add event listener to logout button 
     addEventListenerlogoutButton();
 
+    /**
+     * event listener to logout button
+     */
+    function addEventListenerlogoutButton() {
+        let logoutButton = document.getElementById("logout");
+        logoutButton.addEventListener("click", function () {
+            //logout is declared in helper.js file
+            logout(redirect, 'index.html');
+        });
+    }
 
+
+    // fetch data from teachers.json and classes.json files then fill classes list section on account page
+    fetchData();
 
     /**
      * Fetchig teachers and classes data 
@@ -66,21 +77,13 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function fetchData() {
 
-        /* get logged in teacher id from browse storage,
-         * loginCheck function is declared in helper.json file will retun loggedin teacher id.
+        /* get logged in teacher from browse storage,
          */
         const loggedinTeacher = getItemFromStorage('loggedin_teacher');
-        if (loggedinTeacher) {
-            // display teacher name on the header of account page
-            displayTeacherName(loggedinTeacher);
-
-            // call fetchClasses function to fetch classes from json file
-            fetchClasses(loggedinTeacher);
-        } else {
-            displayTeacherNotFound();
-            displayClassesNotFound();
-            throw `cannot find teacher with id ${loggedinTeacherId}`
-        }
+        // display teacher name on the header of account page
+        displayTeacherName(loggedinTeacher);
+        // call fetchClasses function to fetch classes from json file
+        fetchClasses(loggedinTeacher);
     }
 
     /**
@@ -162,17 +165,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    /**
-     * event listener to logout button
-     */
-    function addEventListenerlogoutButton() {
-        let logoutButton = document.getElementById("logout");
-        logoutButton.addEventListener("click", function () {
-            //logout is declared in helper.js file
-            logout(redirect, 'index.html');
-        });
-    }
-
 
     /**
      * return teacher's classes
@@ -193,22 +185,14 @@ document.addEventListener("DOMContentLoaded", function () {
      * display teacher name on the header of account page
      */
     function displayTeacherName(teacher) {
-        if (teacher) {
-            let teacherNameElement = document.getElementById("teacher-name");
-            teacherNameElement.innerText = teacher.username;
-        } else {
-            displayTeacherNotFound();
-        }
-    }
-
-
-    /**
-     * Display Teacher not found message on teachers table
-     */
-    function displayTeacherNotFound() {
         let teacherNameElement = document.getElementById("teacher-name");
-        teacherNameElement.innerText = "Teacher not found";
+        let displayedText = "Teacher not found"
+        if (teacher) {
+            teacherNameElement.innerText = teacher.username;
+        }
+        teacherNameElement.innerText = displayedText;
     }
+
 
     /**
      * Display classes not found message in classes list

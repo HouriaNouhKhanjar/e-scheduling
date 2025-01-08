@@ -56,6 +56,9 @@ window.onload = function () {
  */
 
 document.addEventListener("DOMContentLoaded", function () {
+    // Enable tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
     // add event listener to logout button 
     addEventListenerlogoutButton();
@@ -70,5 +73,66 @@ document.addEventListener("DOMContentLoaded", function () {
             logout(redirect, 'index.html');
         });
     }
+
+
+    // fetch data from reservations.json files then fill time slots section on schedule page
+    fetchData();
+
+    /**
+     * Fetchig reservations data. 
+     * Get the logged in teacher object according to the loggedin_teacher key, which is saved in browser storage according to the class key
+     * Get the chosen class object according to the class, which is saved in browser storage.
+     * Display class name on the header of schedule page
+     * call fetchReservations function to get the reservations
+     */
+    function fetchData() {
+
+        //  get logged in teacher from browse storage
+        const loggedinTeacher = getItemFromStorage('loggedin_teacher');
+        displayTeacherName(loggedinTeacher);
+        if (loggedinTeacher) {
+            //  get chosenClass from browse storage
+            const chosenClass = getItemFromStorage('class');
+            // display teacher name on the header of schedule page
+            displayClassName(chosenClass);
+            if (chosenClass) {
+                // call fetchClasses function to fetch reservations from json file
+                // fetchClasses(loggedinTeacher);
+            } else {
+                hideLoader();
+                throw `cannot find the chosen class`;
+            }
+        } else {
+            hideLoader();
+            throw `cannot find the logged in teacher`;
+        }
+    }
+
+
+
+    /*
+     * display teacher name on the header of schedule page
+     */
+    function displayTeacherName(teacher) {
+        let teacherNameElement = document.getElementById("teacher-name");
+        let displayedText = "Teacher not found";
+        if (teacher) {
+            displayedText = teacher.username;
+        }
+        teacherNameElement.innerText = displayedText;
+    }
+
+    /*
+     * display class name on the header of schedule page
+     */
+    function displayClassName(chosenClass) {
+        let classNameElement = document.getElementById("class-name");
+        let displayedText = "class not found";
+        if (chosenClass) {
+            displayedText = chosenClass.name;
+        }
+        classNameElement.innerText = displayedText;
+    }
+
 
 });
