@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // acreate the row element, the parent for days and time slots
         let rowElement = document.createElement("div");
-        rowElement.classList.add("row");
+        rowElement.classList.add("row", "time-slots-table");
 
         // add time slots element on large devices
         rowElement.innerHTML = `<div class="times col-lg-2 d-none d-lg-block">
