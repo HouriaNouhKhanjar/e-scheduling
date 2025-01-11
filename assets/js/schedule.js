@@ -40,11 +40,11 @@
  */
 window.onload = function () {
     //call loginAndClassCheck function with loggedin_teacher parameter to check the teacher and class in browser storage
-    loginAndClassCheck(["loggedin_teacher", "class"], function (isLoggedIn, isClassChosen) {
+    loginAndClassCheck(function (isLoggedIn, isClassChosen) {
         if (!isLoggedIn) {
-            redirect('index.html');
+            redirect(CONFIG.START_PAGE);
         } else if (!isClassChosen) {
-            redirect('account.html');
+            redirect(CONFIG.ACCOUNT_PAGE);
         }
     });
 }
@@ -70,10 +70,10 @@ document.addEventListener("DOMContentLoaded", function () {
      * event listener to logout button
      */
     function addEventListenerlogoutButton() {
-        let logoutButton = document.getElementById("logout");
+        let logoutButton = document.getElementById(CONFIG.LOGOUT);
         logoutButton.addEventListener("click", function () {
             //logout is declared in helper.js file
-            logout(redirect, 'index.html');
+            logout(CONFIG.START_PAGE);
         });
     }
 
@@ -93,26 +93,23 @@ document.addEventListener("DOMContentLoaded", function () {
     function fetchData() {
 
         //  get logged in teacher from browse storage
-        const loggedinTeacher = getItemFromStorage('loggedin_teacher');
+        const loggedinTeacher = getItemFromStorage(CONFIG.LOGGED_IN_TEACHER);
         displayTeacherName(loggedinTeacher);
         if (loggedinTeacher) {
             //  get chosenClass from browse storage
-            const chosenClass = getItemFromStorage('class');
+            const chosenClass = getItemFromStorage(CONFIG.CHOSEN_CLASS);
             // display teacher name on the header of schedule page
             displayClassName(chosenClass);
             if (chosenClass) {
-                //fetch settings data from settings.json file
-                fetchJsonFile("settings.json").then((settings) => {
+                //  get settings and reservations from browse storage
+                let settings = getItemFromStorage(CONFIG.SETTINGS);
+                let reservations = getItemFromStorage(CONFIG.RESERVATIONS);
 
-                        // store settings in storage
-                        setItemInStorage("settings", settings);
-                        // fetch reservations data 
-                        fetchReservations(loggedinTeacher, chosenClass, settings);
-
-                    })
-                    .catch((error) => {
-                        throw `Unable to fetch data:", ${error}`;
-                    });
+                // filter reservations to get teacher reservations, class reservtions,
+                // and loggedin teacher with chosen class reservation
+                let filteredReservations = filterReservations(loggedinTeacher, chosenClass, reservations);
+                // fill  time slots
+                fillTimeSlotsTable(filteredReservations, settings);
 
             } else {
                 hideLoader();
@@ -124,23 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-
-    // Fetching reservations from reservations.json file and display the data
-    function fetchReservations(teacher, classObj, settings) {
-        // call the fetchJsonFile function, which is declared in helper.js file , to fetch classes from classes.json file
-        fetchJsonFile("reservations.json").then((data) => {
-                //filter reservations
-                const reservations = filterReservations(teacher, classObj, data);
-                // fill  time slots
-                fillTimeSlotsTable(reservations, settings);
-            })
-            .catch((error) => {
-                displayReservationsNotFound();
-                throw `Unable to fetch data:", ${error}`;
-            });
-    }
-
-
     /**
      * Filter reservation according to teacher and class
      */
@@ -151,18 +131,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         //  filter the reservation that contains teacher id or class id or both
         reservations.every((res) => {
-            if (res.teacher_id == teacher.id && res.class_id == classObj.id) {
+            if (res[CONFIG.TEACHER_ID] == teacher[CONFIG.ID] && res[CONFIG.CLASS_ID] == classObj[CONFIG.ID]) {
                 teacherClassReservation = res;
-            } else if (res.teacher_id == teacher.id) {
+            } else if (res[CONFIG.TEACHER_ID] == teacher[CONFIG.ID]) {
                 teacherReservations.push(res);
-            } else if (res.class_id == classObj.id) {
+            } else if (res[CONFIG.CLASS_ID] == classObj[CONFIG.ID]) {
                 classReservations.push(res);
             }
             return res;
         });
-        setItemInStorage("teacher_reservations", teacherReservations)
-        setItemInStorage("class_reservations", classReservations);
-        setItemInStorage("teacher_class_reservation", teacherClassReservation);
+        setItemInStorage(CONFIG.TEACHER_RESERVATIONS, teacherReservations)
+        setItemInStorage(CONFIG.CLASS_RESERVATIONS, classReservations);
+        setItemInStorage(CONFIG.TEACHER_CLASS_RESERVATION, teacherClassReservation);
 
         return {
             "teacherReservations": teacherReservations,
@@ -180,11 +160,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const teacherClassReservation = reservations.teacherClassReservation;
             // display lessons count
             displayLessonsCount(teacherClassReservation);
-            if (settings && settings.days && settings.time_slots) {
-                let reservationsList = document.querySelector("#reservations-list-section");
+            if (settings && settings[CONFIG.DAYS] && settings[CONFIG.TIME_SLOTS]) {
+                let reservationsList = document.querySelector(`#${CONFIG.RESERVATIONS_LIST}`);
                 // create container elemnt for reservation section
                 const containerElement = createReservationContainerElement(reservations, settings,
-                    teacherClassReservation.teacher_id, teacherClassReservation.class_id);
+                    teacherClassReservation[CONFIG.TEACHER_ID], teacherClassReservation[CONFIG.CLASS_ID]);
 
                 reservationsList.appendChild(containerElement);
 
@@ -236,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function createDaysHtml(rowElement, settings, reservations, teacher, classObj) {
 
         // for each day display the day name, the time slots in small devices, and the slot related to day and time slot
-        for (let day of settings.days) {
+        for (let day of settings[CONFIG.DAYS]) {
             // display day name
             let dayElement = document.createElement("div");
             dayElement.classList.add("col-12", "col-lg-2", "day");
@@ -253,15 +233,16 @@ document.addEventListener("DOMContentLoaded", function () {
             // for each slot declared in settings
             let timeSlotsElement = document.createElement("div");
             timeSlotsElement.classList.add("time-slots", "flex-grow-1");
-            let timeSlotsHtml = '';
-            for (let time of settings.time_slots) {
-                // Check the slot if it is already occupied or selected from the teacher him self
-                const slotClasses = getSlotClasses(reservations, day, time);
+            let timeSlotsHtml = "";
+            for (let time of settings[CONFIG.TIME_SLOTS]) {
+                // Check the slot if it is already selected from the teacher him self or from other teacher
+                // or if it selected from the teacher himself for another class 
+                const slotType = getSlotType(reservations, day, time);
 
-                timeSlotsHtml += `<div class="slot ${slotClasses.classes}" data-day="${day}" data-time-slot="${time}" 
+                timeSlotsHtml += `<div class="slot ${slotType.classes}" data-day="${day}" data-time-slot="${time}" 
                                        data-teacher="${teacher}" 
                                        data-class="${classObj}">
-                                          ${slotClasses.message}
+                                          ${slotType.message}
                                    </div>`
             }
             timeSlotsElement.innerHTML = timeSlotsHtml;
@@ -279,54 +260,65 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /**
      * 
-     * create times html to display on the reservations section on schedule page
+     * create times HTML element to display on the reservations section on schedule page
      */
     function createTimesHtml(settings) {
         // get all time slots from settings and display them
         let timeSlots = "";
-        settings.time_slots.every((time) => timeSlots += `<div class="time">${time}</div>`);
-        return timeSlots
+        settings[CONFIG.TIME_SLOTS].every((time) => timeSlots += `<div class="time">${time}</div>`);
+        return timeSlots;
     }
 
 
-    /**
-     *  Check the slot if is already occupied or selcted from the teache himself
+    /** 
+     * Check the slot if it is already selected from the teacher him self or from other teacher
+     *  or if it selected from the teacher himself for another class 
      */
-    function getSlotClasses(reservations, day, time) {
+    function getSlotType(reservations, day, time) {
 
         // if no conditions met
         //then the slot is active and the user can select the slot
         let classList = "slot-active";
-        let message = "click to select";
+        let message = "";
+        let count = 0 ;
 
         // check if the slot is selected from other teachers
         const selectedFromTeacher = reservations.classReservations.filter((res) =>
-            res.times_slots && res.times_slots[day] &&
-            res.times_slots[day].length && res.times_slots[day].includes(time)
+            res[CONFIG.TIMES_SLOTS] && res[CONFIG.TIMES_SLOTS][day] &&
+            res[CONFIG.TIMES_SLOTS][day].length && res[CONFIG.TIMES_SLOTS][day].includes(time)
         );
-
         // check if the slot is selected for another class
         const selectedForClass = reservations.teacherReservations.filter((res) =>
-            res.times_slots && res.times_slots[day] &&
-            res.times_slots[day].length && res.times_slots[day].includes(time));
+            res[CONFIG.TIMES_SLOTS] && res[CONFIG.TIMES_SLOTS][day] &&
+            res[CONFIG.TIMES_SLOTS][day].length && res[CONFIG.TIMES_SLOTS][day].includes(time)
+        );
 
         // check if the slot is selected for this class from the teacher himself
-        const timeSlotes = reservations.teacherClassReservation.times_slots;
+        const timeSlotes = reservations.teacherClassReservation[CONFIG.TIMES_SLOTS];
         const selectedFromTeacherClass = timeSlotes && timeSlotes[day] && timeSlotes[day].length ?
             timeSlotes[day].includes(time) : null;
 
         if (selectedFromTeacher && selectedFromTeacher.length) {
             classList = "slot-disabled";
-            message = " Reserved by another teacher ";
+            message = "Reserved by another teacher";
+            count++;
         }
         if (selectedForClass && selectedForClass.length) {
             classList = "slot-disabled";
-            message += " \n Reserved for another class ";
+            message += " \n Reserved for another class";
+            count++;
         }
         if (selectedFromTeacherClass) {
-            classList = "slot-active selected";
+            classList = `slot-active ${CONFIG.SELECTED}`;
             message = "click to remove selection";
+            count++;
         }
+
+        // if no condition is met then the user can select the slot
+        if(count===0) {
+            message = "click to select";
+        }
+
         return {
             "classes": classList,
             "message": message
@@ -339,14 +331,14 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function addEventListenerToTimeSlot() {
 
-        let timeSlotsElement = document.querySelectorAll("#reservations-list-section .slot-active");
-       
+        let timeSlotsElement = document.querySelectorAll(`#${CONFIG.RESERVATIONS_LIST} .slot-active`);
+
         //for each element of time slots add event listener on click 
         for (let slot of timeSlotsElement) {
             slot.addEventListener("click", function () {
                 // chsnge status of clicked slot
-                this.innerText = this.classList.contains("selected")? "click to select" : "click to remove selection";
-                this.classList.toggle('selected');
+                this.innerText = this.classList.contains(CONFIG.SELECTED) ? "click to select" : "click to remove selection";
+                this.classList.toggle(CONFIG.SELECTED);
             });
         }
     }
@@ -355,10 +347,10 @@ document.addEventListener("DOMContentLoaded", function () {
      * Display teacher name on the header of schedule page
      */
     function displayTeacherName(teacher) {
-        let teacherNameElement = document.getElementById("teacher-name");
+        let teacherNameElement = document.getElementById(CONFIG.TEACHER_NAME_ELEMENT);
         let displayedText = "Teacher not found";
         if (teacher) {
-            displayedText = teacher.username;
+            displayedText = teacher[CONFIG.TEACHER_USERNAME];
         }
         teacherNameElement.innerText = displayedText;
     }
@@ -367,10 +359,10 @@ document.addEventListener("DOMContentLoaded", function () {
      * Display class name on the header of schedule page
      */
     function displayClassName(chosenClass) {
-        let classNameElement = document.getElementById("class-name");
+        let classNameElement = document.getElementById(CONFIG.CLASS_NAME_ELEMENT);
         let displayedText = "class not found";
         if (chosenClass) {
-            displayedText = chosenClass.name;
+            displayedText = chosenClass[CONFIG.CLASS_NAME];
         }
         classNameElement.innerText = displayedText;
     }
@@ -379,7 +371,7 @@ document.addEventListener("DOMContentLoaded", function () {
      * Display reservations not found on reservations section
      */
     function displayReservationsNotFound() {
-        let reservationsElement = document.getElementById("reservations-list-section");
+        let reservationsElement = document.getElementById(CONFIG.RESERVATIONS_LIST);
         let element = document.createElement("div");
         element.classList.add("col-12", "text-center");
         element.innerText = "Reservations not found";
@@ -391,10 +383,10 @@ document.addEventListener("DOMContentLoaded", function () {
      * Display lessons count
      */
     function displayLessonsCount(teacherClassReservation) {
-        let lessonCountElement = document.getElementById("lessons-count");
+        let lessonCountElement = document.getElementById(CONFIG.LESSON_COUNT_ELEMENT);
         let displayedText = 0;
         if (teacherClassReservation) {
-            displayedText = teacherClassReservation.required_time_slots;
+            displayedText = teacherClassReservation[CONFIG.REQUIRED_TIME_SLOTS];
         }
         lessonCountElement.innerText = displayedText;
     }

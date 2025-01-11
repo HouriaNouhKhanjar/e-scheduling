@@ -1,6 +1,64 @@
 // This file contains helper functions to avoid duplicate code
 
 /**
+ * Global Settings Keys
+ */
+const CONFIG = {
+    // storage keys
+    LOGGED_IN_TEACHER: "loggedin_teacher",
+    TEACHERS: "teachers",
+    CLASSES: "classes",
+    CHOSEN_CLASS: "chosen_class",
+    RESERVATIONS: "reservations",
+    SETTINGS: "settings",
+    TEACHER_RESERVATIONS: "teacher_reservations",
+    CLASS_RESERVATIONS: "class_reservations",
+    TEACHER_CLASS_RESERVATION: "teacher_class_reservation",
+
+    // Json Keys
+    ID: "id",
+    TEACHER_USERNAME: "username",
+    TEACHER_ID: "teacher_id",
+    TEACHER_CLASSES: "classes",
+    CLASS_NAME: "name",
+    CLASS_ID: "class_id",
+    TIME_SLOTS: "time_slots",
+    TIMES_SLOTS: "times_slots",
+    REQUIRED_TIME_SLOTS: "required_time_slots",
+    DAYS: "days",
+    DAY: "day",
+
+    // pages name
+    START_PAGE: "index.html",
+    ACCOUNT_PAGE: "account.html",
+    SCHEDULE_PAGE: "schedule.html",
+
+    // Json file names
+    SETTINGS_FILE: "settings.json",
+    TEACHERS_FILE: "teachers.json",
+    CLASSES_FILE: "classes.json",
+    RESERVATIONS_FILE: "reservations.json",
+
+
+    // HTML main sections' id on index, account, schedule pages
+    TEACHERS_TABLE: "teachers-table",
+    CLASSES_LIST: "classes-list-section",
+    RESERVATIONS_LIST: "reservations-list-section",
+
+    // some HTML ids and classes
+    TEACHER_NAME_ELEMENT: "teacher-name",
+    CLASS_NAME_ELEMENT: "class-name",
+    LESSON_COUNT_ELEMENT: "lessons-count",
+    LOGOUT: "logout",
+    LOADER: "loader",
+    HIDE_CLASS: "hide",
+    SELECTED: "selected",
+
+    // json data file path
+    DATA_PATH: "./assets/data/"
+}
+
+/**
  * Redirect to pageName
  */
 function redirect(pageName) {
@@ -13,8 +71,8 @@ function redirect(pageName) {
 /**
  * Check if any teacher was logged in
  */
-function loginCheck(key, callback) {
-    const loggedinTeacher = getItemFromStorage(key);
+function loginCheck(callback) {
+    const loggedinTeacher = getItemFromStorage(CONFIG.LOGGED_IN_TEACHER);
     callback(loggedinTeacher);
 }
 
@@ -22,22 +80,17 @@ function loginCheck(key, callback) {
  * check if any teacher is logged in and if any 
  * class is chosen
  */
-function loginAndClassCheck(keys, callback) {
-    if (keys && keys.length === 2) {
-        const loggedinTeacher = getItemFromStorage(keys[0]);
-        const classObj = getItemFromStorage(keys[1]);
-        callback(loggedinTeacher, classObj);
-    } else {
-        throw `Error in keys list, checking if the logged in teacher and class are in storage`;
-    }
+function loginAndClassCheck(callback) {
+    const loggedinTeacher = getItemFromStorage(CONFIG.LOGGED_IN_TEACHER);
+    const classObj = getItemFromStorage(CONFIG.CHOSEN_CLASS);
+    callback(loggedinTeacher, classObj);
 }
 
 /**
  * Save loggedIn teacher in browser storage
  */
-function loggedIn(key, teacher, itemsToRemove, pageName, callback) {
-    setItemInStorage(key, teacher);
-    removeItemsFromStorage(itemsToRemove);
+function loggedIn(teacher, pageName, callback) {
+    setItemInStorage(CONFIG.LOGGED_IN_TEACHER, teacher);
     callback(pageName);
 }
 
@@ -46,16 +99,23 @@ function loggedIn(key, teacher, itemsToRemove, pageName, callback) {
  */
 function removeItemsFromStorage(keys) {
     for (let key of keys) {
-        deleteItemFromStorage(key);
+        if(getItemFromStorage(key)) {
+            deleteItemFromStorage(key);
+        }
     }
 }
 
 /**
  * logout and reset all elements in browser storage
  */
-function logout(callback, parameter) {
-    clearStorage();
-    callback(parameter);
+function logout(pageName) {
+    // remove  chosen class and edited reservations from storage if they are stored
+    // because those keys associated with the time slots reservation process 
+    removeItemsFromStorage([CONFIG.CHOSEN_CLASS, CONFIG.CLASS_RESERVATIONS,
+        CONFIG.TEACHER_RESERVATIONS, CONFIG.TEACHER_CLASS_RESERVATION,
+        CONFIG.LOGGED_IN_TEACHER, CONFIG.CLASSES
+    ]);
+    redirect(pageName);
 }
 
 /**
@@ -91,7 +151,7 @@ function clearStorage() {
  * Input: fileName is a string parameter
  */
 function fetchJsonFile(fileName) {
-    return fetch(`./assets/data/${fileName}`)
+    return fetch(`${CONFIG.DATA_PATH}${fileName}`)
         .then((res) => {
             if (!res.ok) {
                 throw new Error(`Fetch JSON error! Status: ${res.status}`);
@@ -105,6 +165,6 @@ function fetchJsonFile(fileName) {
  * Hide the loader
  */
 function hideLoader() {
-    let loader = document.getElementById("loader");
-    loader.classList.add("hide");
+    let loader = document.getElementById(CONFIG.LOADER);
+    loader.classList.add(CONFIG.HIDE_CLASS);
 }

@@ -32,12 +32,15 @@
  */
 window.onload = function () {
     //call loginCheck function with loggedin_teacher parameter to check the teacher in browser storage
-    loginCheck("loggedin_teacher", function (isLoggedIn) {
-        // remove class and reservations from storage
-        removeItemsFromStorage(['class', 'settings', 'class_reservations', 'teacher_reservations', 'teacher_class_reservation']);
+    loginCheck(function (isLoggedIn) {
+        // remove  chosen class and edited reservations from storage if they are stored
+        // because those keys associated with the time slots reservation process 
+        removeItemsFromStorage([CONFIG.CHOSEN_CLASS, CONFIG.CLASS_RESERVATIONS,
+            CONFIG.TEACHER_RESERVATIONS, CONFIG.TEACHER_CLASS_RESERVATION
+        ]);
         if (!isLoggedIn) {
             //redirect to teacher account, below function is declared in helper.js file
-            redirect('index.html');
+            redirect(CONFIG.START_PAGE);
         }
     });
 }
@@ -56,10 +59,10 @@ document.addEventListener("DOMContentLoaded", function () {
      * event listener to logout button
      */
     function addEventListenerlogoutButton() {
-        let logoutButton = document.getElementById("logout");
+        let logoutButton = document.getElementById(CONFIG.LOGOUT);
         logoutButton.addEventListener("click", function () {
             //logout is declared in helper.js file
-            logout(redirect, 'index.html');
+            logout(CONFIG.START_PAGE);
         });
     }
 
@@ -77,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         /* get logged in teacher from browse storage,
          */
-        const loggedinTeacher = getItemFromStorage('loggedin_teacher');
+        const loggedinTeacher = getItemFromStorage(CONFIG.LOGGED_IN_TEACHER);
         // display teacher name on the header of account page
         displayTeacherName(loggedinTeacher);
         // call fetchClasses function to fetch classes from json file
@@ -91,18 +94,30 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function fetchClasses(teacher) {
         if (teacher) {
-            // call the fetchJsonFile function, which is declared in helper.js file , to fetch classes from classes.json file
-            fetchJsonFile("classes.json").then((data) => {
-                    //filter classes
-                    const classes = filterClassesByTeacher(teacher, data);
 
-                    // fill classes list
-                    fillClassesList(classes);
-                })
-                .catch((error) => {
-                    displayClassesNotFound();
-                    throw `Unable to fetch data:", ${error}`;
-                });
+            // check if the classes were not fetched yet
+            // by checking classes item in the sotage
+            let teacherClasses = getItemFromStorage(CONFIG.CLASSES);
+            if (!teacherClasses) {
+                // call the fetchJsonFile function, which is declared in helper.js file , to fetch classes from classes.json file
+                fetchJsonFile(CONFIG.CLASSES_FILE).then((data) => {
+                        //filter classes
+                        const classes = filterClassesByTeacher(teacher, data);
+                        
+                        // store teacher classes to the storage
+                        setItemInStorage(CONFIG.CLASSES, classes);
+
+                        // fill classes list
+                        fillClassesList(classes);
+                    })
+                    .catch((error) => {
+                        displayClassesNotFound();
+                        throw `Unable to fetch data:", ${error}`;
+                    });
+            } else {
+                fillClassesList(teacherClasses);
+            }
+
         } else {
             displayClassesNotFound();
             throw `Unable to fetch classes for not found teacher`;
@@ -115,17 +130,16 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function fillClassesList(classes) {
         if (classes && classes.length) {
-            setItemInStorage('classes', classes);
-            let classesList = document.querySelector("#classes-list-section");
+            let classesList = document.getElementById(CONFIG.CLASSES_LIST);
             for (let classObj of classes) {
                 let element = document.createElement("div");
                 element.classList.add("col-12", "col-md-6", "col-xl-4");
                 element.innerHTML = ` <div class="card">
                     <div class="card-body">
-                      <h3>${classObj.name}</h3>
+                      <h3>${classObj[CONFIG.CLASS_NAME]}</h3>
                       <button class="btn action-button-secondary modify-schedule" 
-                              data-class-id="${classObj.id}"
-                                        aria-label="modify schedule for class ${classObj.name}">
+                              data-class-id="${classObj[CONFIG.ID]}"
+                                        aria-label="modify schedule for class ${classObj[CONFIG.CLASS_NAME]}">
                                             Modify Schedule
                                         </button>
                     </div>
@@ -146,18 +160,19 @@ document.addEventListener("DOMContentLoaded", function () {
      * event listener to Modify Schedule button
      */
     function addEventListenerModifyScheduleButton() {
-        let modifyScheduleButtons = document.querySelectorAll("#classes-list-section .modify-schedule");
+
+        let modifyScheduleButtons = document.querySelectorAll(`#${CONFIG.CLASSES_LIST} .modify-schedule`);
+
         for (let button of modifyScheduleButtons) {
             button.addEventListener("click", function (e) {
                 //get classes's id from attribute data-class-id
                 const classId = e.target.getAttribute("data-class-id");
-                const classObj = getItemFromStorage('classes').find((cls) => cls.id == classId);
+                const classObj = getItemFromStorage(CONFIG.CLASSES).find((cls) => cls[CONFIG.ID] == classId);
                 //save class in browser storage, below function is declared in helper.js file
-                setItemInStorage("class", classObj);
-                // remove classes from storage
-                deleteItemFromStorage('classes');
+                setItemInStorage(CONFIG.CHOSEN_CLASS, classObj);
+
                 //redirect to teacher account, below function is declared in helper.js file
-                redirect('schedule.html');
+                redirect(CONFIG.SCHEDULE_PAGE);
             });
         }
 
@@ -169,9 +184,9 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function filterClassesByTeacher(teacher, classes) {
         let filterdClasses = [];
-        if (teacher && teacher.classes && teacher.classes.length) {
+        if (teacher && teacher[CONFIG.TEACHER_CLASSES] && teacher[CONFIG.TEACHER_CLASSES].length) {
             for (let classObj of classes) {
-                if (teacher.classes.find((cl) => cl["class_id"] == classObj.id)) {
+                if (teacher[CONFIG.TEACHER_CLASSES].find((cl) => cl[CONFIG.CLASS_ID] == classObj[CONFIG.ID])) {
                     filterdClasses.push(classObj);
                 }
             }
@@ -183,10 +198,10 @@ document.addEventListener("DOMContentLoaded", function () {
      * display teacher name on the header of account page
      */
     function displayTeacherName(teacher) {
-        let teacherNameElement = document.getElementById("teacher-name");
+        let teacherNameElement = document.getElementById(CONFIG.TEACHER_NAME_ELEMENT);
         let displayedText = "Teacher not found"
         if (teacher) {
-            displayedText = teacher.username;
+            displayedText = teacher[CONFIG.TEACHER_USERNAME];
         }
         teacherNameElement.innerText = displayedText;
     }
@@ -196,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
      * Display classes not found message in classes list
      */
     function displayClassesNotFound() {
-        let classesListElement = document.getElementById("classes-list-section");
+        let classesListElement = document.getElementById(CONFIG.CLASSES_LIST);
         let element = document.createElement("div");
         element.classList.add("col-12", "text-center");
         element.innerHTML = `<p>No classes Found</p> `;
