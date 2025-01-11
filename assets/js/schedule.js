@@ -186,11 +186,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 const containerElement = createReservationContainerElement(reservations, settings,
                     teacherClassReservation.teacher_id, teacherClassReservation.class_id);
 
-
                 reservationsList.appendChild(containerElement);
+
                 //call hideLoader function, which is declared in helper.js file to hide the loader after displaying data 
                 hideLoader();
+
                 //add event listener to Select slot button
+                addEventListenerToTimeSlot();
+
             } else {
                 displayReservationsNotFound();
             }
@@ -294,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // if no conditions met
         //then the slot is active and the user can select the slot
         let classList = "slot-active";
-        let message = "select";
+        let message = "click to select";
 
         // check if the slot is selected from other teachers
         const selectedFromTeacher = reservations.classReservations.filter((res) =>
@@ -321,13 +324,31 @@ document.addEventListener("DOMContentLoaded", function () {
             message += " \n Reserved for another class ";
         }
         if (selectedFromTeacherClass) {
-            classList = "selected";
-            message = "remove selection";
+            classList = "slot-active selected";
+            message = "click to remove selection";
         }
         return {
             "classes": classList,
             "message": message
         };
+    }
+
+    /**
+     * 
+     * Add Eventlistener to time slot
+     */
+    function addEventListenerToTimeSlot() {
+
+        let timeSlotsElement = document.querySelectorAll("#reservations-list-section .slot-active");
+       
+        //for each element of time slots add event listener on click 
+        for (let slot of timeSlotsElement) {
+            slot.addEventListener("click", function () {
+                // chsnge status of clicked slot
+                this.innerText = this.classList.contains("selected")? "click to select" : "click to remove selection";
+                this.classList.toggle('selected');
+            });
+        }
     }
 
     /*

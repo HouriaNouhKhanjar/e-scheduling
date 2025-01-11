@@ -44,8 +44,8 @@ function loggedIn(key, teacher, itemsToRemove, pageName, callback) {
 /**
  * remove more than one item from storage
  */
-function removeItemsFromStorage(keys){
-    for(let key of keys) {
+function removeItemsFromStorage(keys) {
+    for (let key of keys) {
         deleteItemFromStorage(key);
     }
 }
@@ -98,6 +98,7 @@ function fetchJsonFile(fileName) {
             }
             return res.json();
         });
+
 }
 
 /**
