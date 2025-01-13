@@ -168,10 +168,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 reservationsList.appendChild(containerElement);
 
-                //call hideLoader function, which is declared in helper.js file to hide the loader after displaying data 
+                //  add save modifications button
+                let saveButton = addSaveModificationsButton();
+                reservationsList.appendChild(saveButton);
+                
+
+                // call hideLoader function, which is declared in helper.js file to hide the loader after displaying data 
                 hideLoader();
 
-                //add event listener to Select slot button
+                // add event listener to Select slot button
                 addEventListenerToTimeSlot();
 
             } else {
@@ -280,7 +285,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //then the slot is active and the user can select the slot
         let classList = "slot-active";
         let message = "";
-        let count = 0 ;
+        let count = 0;
 
         // check if the slot is selected from other teachers
         const selectedFromTeacher = reservations.classReservations.filter((res) =>
@@ -315,7 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // if no condition is met then the user can select the slot
-        if(count===0) {
+        if (count === 0) {
             message = "click to select";
         }
 
@@ -341,6 +346,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 this.classList.toggle(CONFIG.SELECTED);
             });
         }
+    }
+
+    /**
+     * Add HTML element to create save modifications button 
+     */
+    function addSaveModificationsButton() {
+        // acreate the row element, the parent for days and time slots
+        let buttonElement = document.createElement("div");
+        buttonElement.classList.add("col-12","text-end", "p-4");
+
+        // add time slots element on large devices
+        buttonElement.innerHTML = `<button class="btn action-button-secondary" id="save-modifications">
+                                     Save Modifications
+                                 </button>`;
+        return buttonElement;
     }
 
     /*
