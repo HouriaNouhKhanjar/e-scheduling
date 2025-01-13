@@ -151,6 +151,8 @@ function clearStorage() {
     localStorage.clear();
 }
 
+
+
 /**
  * Fetching Data from JSON File
  * Input: fileName is a string parameter

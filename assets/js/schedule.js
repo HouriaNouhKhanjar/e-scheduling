@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // and loggedin teacher with chosen class reservation
                 let filteredReservations = filterReservations(loggedinTeacher, chosenClass, reservations);
                 // fill  time slots
-                fillTimeSlotsTable(filteredReservations, settings);
+                fillTimeSlotsTable(loggedinTeacher, chosenClass, filteredReservations, settings);
 
             } else {
                 hideLoader();
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Fill time slots table on schedule page
      */
-    function fillTimeSlotsTable(reservations, settings) {
+    function fillTimeSlotsTable(loggedinTeacher, chosenClass, reservations, settings) {
         if (reservations && reservations.teacherClassReservation) {
             // Get the reservation related for teacher and class
             const teacherClassReservation = reservations.teacherClassReservation;
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 addEventListenerToTimeSlot();
 
                 // add event listener to click on the save modifications button
-                addEventListenerToSaveButton();
+                addEventListenerToSaveButton(loggedinTeacher, chosenClass);
 
             } else {
                 displayReservationsNotFound();
@@ -360,6 +360,7 @@ document.addEventListener("DOMContentLoaded", function () {
         buttonElement.classList.add("col-12", "text-end", "p-4");
 
         // add time slots element on large devices
+        // add disbled class after checking settings disable_modification
         buttonElement.innerHTML = `<button class="btn action-button-secondary" id="${CONFIG.SAVE_MODIFICATIONS}">
                                      Save Modifications
                                  </button>`;
@@ -369,12 +370,35 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Add event listener to save modifications button
      */
-    function addEventListenerToSaveButton() {
+    function addEventListenerToSaveButton(loggedinTeacher, chosenClass) {
         let saveButton = document.getElementById(CONFIG.SAVE_MODIFICATIONS);
         saveButton.addEventListener("click", function () {
-           displayMessageModal("success", function() {
-              redirect(CONFIG.ACCOUNT_PAGE);
-           });
+            
+            // check if any the loggedin teacher in the storage has been changed,
+            // this will be done by opening another tab and logout and login again with another teacher
+            const currentLoggedinTeacher = getItemFromStorage(CONFIG.LOGGED_IN_TEACHER);
+            if (!currentLoggedinTeacher ||
+                currentLoggedinTeacher &&
+                currentLoggedinTeacher[CONFIG.ID] != loggedinTeacher[CONFIG.ID]) {
+
+                displayMessageModal(`The login information has changed. Please return to the
+                                     ${currentLoggedinTeacher &&
+                                     currentLoggedinTeacher[CONFIG.ID]? "account":"start"} page.`,
+                    function () {
+                        redirect(currentLoggedinTeacher &&
+                            currentLoggedinTeacher[CONFIG.ID]? CONFIG.ACCOUNT_PAGE: CONFIG.START_PAGE);
+                    });
+            }
+
+            // check if the teacher exceeds the number of classes allocated to the class
+
+            // check if  the teacher made some changes on reservations,
+            //  that will be done by opening another tab and save other changes that made on this tab before reterning to this one
+
+
+            // else, the change will be saved successfully to the storage in reservations
+            // check if total number of lesons has been reached
+
         });
     }
 

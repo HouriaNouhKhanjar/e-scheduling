@@ -103,19 +103,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 fetchJsonFile(CONFIG.CLASSES_FILE).then((data) => {
                         //filter classes
                         const classes = filterClassesByTeacher(teacher, data);
-                        
+
                         // store teacher classes to the storage
                         setItemInStorage(CONFIG.CLASSES, classes);
 
                         // fill classes list
-                        fillClassesList(classes);
+                        fillClassesList(classes, teacher);
                     })
                     .catch((error) => {
                         displayClassesNotFound();
                         throw `Unable to fetch data:", ${error}`;
                     });
             } else {
-                fillClassesList(teacherClasses);
+                fillClassesList(teacherClasses, teacher);
             }
 
         } else {
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Fill classes list on account page
      */
-    function fillClassesList(classes) {
+    function fillClassesList(classes, teacher) {
         if (classes && classes.length) {
             let classesList = document.getElementById(CONFIG.CLASSES_LIST);
             for (let classObj of classes) {
@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
             //call hideLoader function, which is declared in helper.js file to hide the loader after fetching data 
             hideLoader();
             //add event listener to Modify Schedule button
-            addEventListenerModifyScheduleButton();
+            addEventListenerModifyScheduleButton(teacher);
         } else {
             displayClassesNotFound();
         }
@@ -159,20 +159,32 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * event listener to Modify Schedule button
      */
-    function addEventListenerModifyScheduleButton() {
+    function addEventListenerModifyScheduleButton(teacher) {
 
         let modifyScheduleButtons = document.querySelectorAll(`#${CONFIG.CLASSES_LIST} .modify-schedule`);
 
         for (let button of modifyScheduleButtons) {
             button.addEventListener("click", function (e) {
-                //get classes's id from attribute data-class-id
-                const classId = e.target.getAttribute("data-class-id");
-                const classObj = getItemFromStorage(CONFIG.CLASSES).find((cls) => cls[CONFIG.ID] == classId);
-                //save class in browser storage, below function is declared in helper.js file
-                setItemInStorage(CONFIG.CHOSEN_CLASS, classObj);
 
-                //redirect to teacher account, below function is declared in helper.js file
-                redirect(CONFIG.SCHEDULE_PAGE);
+                // check if any the loggedin teacher in the storage has been changed,
+                // this will be done by opening another tab and logout and login again with another teacher
+                const currentLoggedinTeacher = getItemFromStorage(CONFIG.LOGGED_IN_TEACHER);
+                if (!currentLoggedinTeacher ||
+                    currentLoggedinTeacher &&
+                    currentLoggedinTeacher[CONFIG.ID] != teacher[CONFIG.ID]) {
+
+                    redirect(CONFIG.ACCOUNT_PAGE);
+                    
+                } else {
+                    //get classes's id from attribute data-class-id
+                    const classId = e.target.getAttribute("data-class-id");
+                    const classObj = getItemFromStorage(CONFIG.CLASSES).find((cls) => cls[CONFIG.ID] == classId);
+                    //save class in browser storage, below function is declared in helper.js file
+                    setItemInStorage(CONFIG.CHOSEN_CLASS, classObj);
+
+                    //redirect to teacher account, below function is declared in helper.js file
+                    redirect(CONFIG.SCHEDULE_PAGE);
+                }
             });
         }
 
