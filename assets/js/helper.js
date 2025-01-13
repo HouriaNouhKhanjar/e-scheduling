@@ -44,6 +44,10 @@ const CONFIG = {
     TEACHERS_TABLE: "teachers-table",
     CLASSES_LIST: "classes-list-section",
     RESERVATIONS_LIST: "reservations-list-section",
+    MESSAGE_MODAL: "message-modal",
+    MESSAGE: "message",
+    DO_ACTION: "do-action",
+
 
     // some HTML ids and classes
     TEACHER_NAME_ELEMENT: "teacher-name",
@@ -53,6 +57,7 @@ const CONFIG = {
     LOADER: "loader",
     HIDE_CLASS: "hide",
     SELECTED: "selected",
+    SAVE_MODIFICATIONS: "save-modifications",
 
     // json data file path
     DATA_PATH: "./assets/data/"

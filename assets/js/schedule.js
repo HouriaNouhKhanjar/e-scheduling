@@ -171,13 +171,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 //  add save modifications button
                 let saveButton = addSaveModificationsButton();
                 reservationsList.appendChild(saveButton);
-                
+
 
                 // call hideLoader function, which is declared in helper.js file to hide the loader after displaying data 
                 hideLoader();
 
-                // add event listener to Select slot button
+                // add event listener to select a time slot
                 addEventListenerToTimeSlot();
+
+                // add event listener to click on the save modifications button
+                addEventListenerToSaveButton();
 
             } else {
                 displayReservationsNotFound();
@@ -354,13 +357,43 @@ document.addEventListener("DOMContentLoaded", function () {
     function addSaveModificationsButton() {
         // acreate the row element, the parent for days and time slots
         let buttonElement = document.createElement("div");
-        buttonElement.classList.add("col-12","text-end", "p-4");
+        buttonElement.classList.add("col-12", "text-end", "p-4");
 
         // add time slots element on large devices
-        buttonElement.innerHTML = `<button class="btn action-button-secondary" id="save-modifications">
+        buttonElement.innerHTML = `<button class="btn action-button-secondary" id="${CONFIG.SAVE_MODIFICATIONS}">
                                      Save Modifications
                                  </button>`;
         return buttonElement;
+    }
+
+    /**
+     * Add event listener to save modifications button
+     */
+    function addEventListenerToSaveButton() {
+        let saveButton = document.getElementById(CONFIG.SAVE_MODIFICATIONS);
+        saveButton.addEventListener("click", function () {
+           displayMessageModal("success", function() {
+              redirect(CONFIG.ACCOUNT_PAGE);
+           });
+        });
+    }
+
+    /**
+     * 
+     * display save modifications result on modal
+     */
+    function displayMessageModal(message, callback) {
+        // display the message modal
+        let messageModal = new bootstrap.Modal(document.getElementById(CONFIG.MESSAGE_MODAL), {});
+        messageModal.show();
+
+        // add the message
+        let messageElement = document.getElementById(CONFIG.MESSAGE);
+        messageElement.innerHTML = message;
+
+        // add event listener to continue button on modal
+        let continueButton = document.getElementById(CONFIG.DO_ACTION);
+        continueButton.addEventListener("click", callback);
     }
 
     /*
