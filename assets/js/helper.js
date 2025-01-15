@@ -25,6 +25,8 @@ const CONFIG = {
     TIME_SLOTS: "time_slots",
     TIMES_SLOTS: "times_slots",
     REQUIRED_TIME_SLOTS: "required_time_slots",
+    DISABLE_MODIFICATION: "disable_modification",
+    CAN_DISABLE_MODIFICATION: "can_disable_modification",
     DAYS: "days",
     DAY: "day",
     PAGE_NAME: "page_name",
@@ -114,7 +116,7 @@ function checkCurrentLoggedIn(teacher, callback) {
 
         // display a message to informe the user to redirect to the suitable page
         displayMessageModal(`The login information has changed. Please
-            ${result[CONFIG.PAGE_NAME]} page.`,
+            ${result[CONFIG.PAGE_NAME]} page.`, true,
             function () {
                 redirect(result[CONFIG.PAGE]);
             });
@@ -186,6 +188,91 @@ function clearStorage() {
     localStorage.clear();
 }
 
+  /**
+     * Filter reservation according to teacher and class
+     */
+  function filterReservations(teacher, classObj, reservations, saveToStorage) {
+    let teacherReservations = [];
+    let classReservations = [];
+    let teacherClassReservation = null;
+
+    //  filter the reservation that contains teacher id or class id or both
+    reservations.every((res) => {
+        if (res[CONFIG.TEACHER_ID] == teacher[CONFIG.ID] && res[CONFIG.CLASS_ID] == classObj[CONFIG.ID]) {
+            teacherClassReservation = res;
+        } else if (res[CONFIG.TEACHER_ID] == teacher[CONFIG.ID]) {
+            teacherReservations.push(res);
+        } else if (res[CONFIG.CLASS_ID] == classObj[CONFIG.ID]) {
+            classReservations.push(res);
+        }
+        return res;
+    });
+
+    if (saveToStorage) {
+        setItemInStorage(CONFIG.TEACHER_RESERVATIONS, teacherReservations)
+        setItemInStorage(CONFIG.CLASS_RESERVATIONS, classReservations);
+        setItemInStorage(CONFIG.TEACHER_CLASS_RESERVATION, teacherClassReservation);
+    }
+
+    return {
+        "teacherReservations": teacherReservations,
+        "classReservations": classReservations,
+        "teacherClassReservation": teacherClassReservation
+    };
+}
+
+/**
+ * Get time slots list from selected time slots HTML elment List
+ * time slot element attributes : day, time-slot, teacher, class 
+ */
+function createTimeSlotsList(timeSlotsElements) {
+    // time slots is an object and the day will be the keys and 
+    // the time slots array will be the values
+    // ex: {"monday": ["09:00-10:00","10:00-11:00"], "friday": ["10:00-11:00"]}   
+    let newTimeSlotsList = {};
+    for(let slot of timeSlotsElements) {
+        const day = slot.getAttribute(`data-day`);
+        const timeSlot = slot.getAttribute(`data-time-slot`);
+        if(newTimeSlotsList && !newTimeSlotsList[day]){
+            newTimeSlotsList[day] = [];
+        }
+            newTimeSlotsList[day].push(timeSlot);
+    }
+    return newTimeSlotsList;
+
+}
+
+
+/**
+ * Compare two reservations list
+ */
+function reservationsListChanged(reservations1, reservations2) {
+    
+    //get only the time slots for eache reservations list to compare
+    const timeSlots1 = getTimeSlotsFromReservations(reservations1);
+    const timeSlots2 = getTimeSlotsFromReservations(reservations2);
+
+    return JSON.stringify(timeSlots1) !== JSON.stringify(timeSlots2);
+}
+
+
+/*
+ * get just the time slots for eache reservations object
+ */
+function getTimeSlotsFromReservations(reservations){
+
+    return reservations? reservations.map((res) => { return res[CONFIG.TIMES_SLOTS] }): null;
+}
+
+/**
+ * Compare two reservation
+ */
+function reservationChanged(reservation1, reservation2) {
+    
+    return JSON.stringify(reservation1[CONFIG.TIMES_SLOTS]) !== JSON.stringify(reservation2[CONFIG.TIMES_SLOTS]);
+   
+}
+
 
 
 /**
@@ -215,12 +302,7 @@ function hideLoader() {
 /**
  * Display modal with a message and a callback
  */
-
-/**
- * 
- * display save modifications result on modal
- */
-function displayMessageModal(message, callback) {
+function displayMessageModal(message, displayContinueButton, callback) {
     // display the message modal
     let messageModal = new bootstrap.Modal(document.getElementById(CONFIG.MESSAGE_MODAL), {});
     messageModal.show();
@@ -228,8 +310,23 @@ function displayMessageModal(message, callback) {
     // add the message
     let messageElement = document.getElementById(CONFIG.MESSAGE);
     messageElement.innerHTML = message;
+    
+    // would the continue button be displayed or hidden
+    if (displayContinueButton) {
+        // add event listener to continue button on modal
+        let continueButton = document.getElementById(CONFIG.DO_ACTION);
+        continueButton.addEventListener("click", callback);
+    } else {
+        hideContinueButton();
+    }
 
-    // add event listener to continue button on modal
-    let continueButton = document.getElementById(CONFIG.DO_ACTION);
-    continueButton.addEventListener("click", callback);
+}
+
+
+/**
+ * Hide the Continue button on modal
+ */
+function hideContinueButton() {
+    let button = document.getElementById(CONFIG.DO_ACTION);
+    button.classList.add(CONFIG.HIDE_CLASS);
 }

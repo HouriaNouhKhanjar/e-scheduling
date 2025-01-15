@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // filter reservations to get teacher reservations, class reservtions,
                 // and loggedin teacher with chosen class reservation
-                let filteredReservations = filterReservations(loggedinTeacher, chosenClass, reservations);
+                let filteredReservations = filterReservations(loggedinTeacher, chosenClass, reservations, true);
                 // fill  time slots
                 fillTimeSlotsTable(loggedinTeacher, chosenClass, filteredReservations, settings);
 
@@ -119,36 +119,6 @@ document.addEventListener("DOMContentLoaded", function () {
             hideLoader();
             throw `cannot find the logged in teacher`;
         }
-    }
-
-    /**
-     * Filter reservation according to teacher and class
-     */
-    function filterReservations(teacher, classObj, reservations) {
-        let teacherReservations = [];
-        let classReservations = [];
-        let teacherClassReservation = null;
-
-        //  filter the reservation that contains teacher id or class id or both
-        reservations.every((res) => {
-            if (res[CONFIG.TEACHER_ID] == teacher[CONFIG.ID] && res[CONFIG.CLASS_ID] == classObj[CONFIG.ID]) {
-                teacherClassReservation = res;
-            } else if (res[CONFIG.TEACHER_ID] == teacher[CONFIG.ID]) {
-                teacherReservations.push(res);
-            } else if (res[CONFIG.CLASS_ID] == classObj[CONFIG.ID]) {
-                classReservations.push(res);
-            }
-            return res;
-        });
-        setItemInStorage(CONFIG.TEACHER_RESERVATIONS, teacherReservations)
-        setItemInStorage(CONFIG.CLASS_RESERVATIONS, classReservations);
-        setItemInStorage(CONFIG.TEACHER_CLASS_RESERVATION, teacherClassReservation);
-
-        return {
-            "teacherReservations": teacherReservations,
-            "classReservations": classReservations,
-            "teacherClassReservation": teacherClassReservation
-        };
     }
 
     /**
@@ -180,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 addEventListenerToTimeSlot();
 
                 // add event listener to click on the save modifications button
-                addEventListenerToSaveButton(loggedinTeacher, chosenClass);
+                addEventListenerToSaveButton(loggedinTeacher, chosenClass, reservations);
 
             } else {
                 displayReservationsNotFound();
@@ -370,24 +340,76 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Add event listener to save modifications button
      */
-    function addEventListenerToSaveButton(loggedinTeacher, chosenClass) {
+    function addEventListenerToSaveButton(loggedinTeacher, chosenClass, reservations) {
         let saveButton = document.getElementById(CONFIG.SAVE_MODIFICATIONS);
         saveButton.addEventListener("click", function () {
-            
+
             // check if any the loggedin teacher in the storage has been changed,
             // this will be done by opening another tab and logout and login again with another teacher
             const currentLoggedin = checkCurrentLoggedIn(loggedinTeacher);
-            if(!currentLoggedin){
-                console.log();
-            } 
+            if (!currentLoggedin) {
+                // get all selected slot 
+                const selectedSlots = document.querySelectorAll(`#${CONFIG.RESERVATIONS_LIST} .selected`);
+                // teachers rervations on chosen class 
+                const teacherClassReservation = reservations.teacherClassReservation;
+                // check if the teacher does not exceed the number of classes allocated to the class
+                if (selectedSlots && selectedSlots.length <= teacherClassReservation[CONFIG.REQUIRED_TIME_SLOTS]) {
+                    // get the current reservations from storage and compare them with 
+                    // the reservation we have, to ensure that no changes occured during the selection process 
+                    // and that will haben by opening new tab
+                    const currentStorageReservations = getItemFromStorage(CONFIG.RESERVATIONS);
+                    const currentReservations = filterReservations(loggedinTeacher, chosenClass, currentStorageReservations, false);
 
-            // check if the teacher exceeds the number of classes allocated to the class
 
-            // check if  the teacher made some changes on reservations,
-            //  that will be done by opening another tab and save other changes that made on this tab before reterning to this one
+                    const isTeachersResrvationsChanged = reservationsListChanged(currentReservations.teacherReservations,
+                        reservations.teacherReservations);
+                    const isClassResrvationsChanged = reservationsListChanged(currentReservations.classReservations,
+                        reservations.classReservations);
+                    const isTeacherCLassResrvationChanged = reservationChanged(currentReservations.teacherClassReservation,
+                        teacherClassReservation);
+
+                    if (!(isTeachersResrvationsChanged || isClassResrvationsChanged || isTeacherCLassResrvationChanged)) {
+
+                        // the changes will be saved successfully to the storage in reservations
+                        const newTimeSlotsList = createTimeSlotsList(selectedSlots);
+                        // update reservations for the loggedin teacher 
+                        const reservationIndex = currentStorageReservations.findIndex((res) =>
+                            res[CONFIG.TEACHER_ID] == loggedinTeacher[CONFIG.ID] && res[CONFIG.CLASS_ID] == chosenClass[CONFIG.ID]);
 
 
-            // else, the change will be saved successfully to the storage in reservations
+                        currentStorageReservations[reservationIndex][CONFIG.TIMES_SLOTS] = newTimeSlotsList;
+                        setItemInStorage(CONFIG.RESERVATIONS, currentStorageReservations);
+                        // display a message to informe the user that there his changes were successfuly saved 
+                        displayMessageModal(`Your changes have been saved successfully.`, true,
+                            function () {
+                                redirect(CONFIG.SCHEDULE_PAGE);
+                            });
+
+
+                    } else {
+                        // if the user has oped another tab and make a changes in another class then
+                        // returnd to this class, the chose class then is changed 
+                        // in order to restore the class we set the old value of chosen class again in the storage
+                        setItemInStorage(CONFIG.CHOSEN_CLASS, chosenClass);
+                        // display a message to informe the user that there is some changes 
+                        // occured during his selection, so he should refrech the page
+                        displayMessageModal(`Some new selections occured during your modifictions please refrech the page`, true,
+                            function () {
+                                redirect(CONFIG.SCHEDULE_PAGE);
+                            }
+                        );
+                    }
+
+
+                } else {
+                    // display a message to informe the user that he exceed the number of 
+                    // required count of lessons
+                    displayMessageModal(`You have selected more than ${teacherClassReservation[CONFIG.REQUIRED_TIME_SLOTS]}.
+                                          Please remove some selections before continue`, false);
+                }
+            }
+
+
             // check if total number of lesons has been reached
 
         });
