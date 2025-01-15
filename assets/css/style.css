@@ -130,6 +130,10 @@ footer {
 }
 
 /* Schedule reservations section */
+#back-to-account {
+    cursor: pointer;
+}
+
 #reservations-list-section .time-slots-table {
     padding: 1rem 2rem;
 }

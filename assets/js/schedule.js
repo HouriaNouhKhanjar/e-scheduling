@@ -152,6 +152,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 // add event listener to click on the save modifications button
                 addEventListenerToSaveButton(loggedinTeacher, chosenClass, settings, reservations);
 
+                // add event listener to go back to account link
+                addEventListenerToRedirectToAccount();
+
             } else {
                 displayReservationsNotFound();
             }
@@ -421,6 +424,16 @@ document.addEventListener("DOMContentLoaded", function () {
     
             });
         }
+    }
+
+    /**
+     * Add Event listener to back to account link
+     */
+    function addEventListenerToRedirectToAccount() {
+        let link = document.getElementById(CONFIG.BACK_TO_ACCOUNT);
+        link.addEventListener("click", function(){
+            redirect(CONFIG.ACCOUNT_PAGE);
+        });
     }
 
     /*

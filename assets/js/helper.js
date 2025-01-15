@@ -53,6 +53,7 @@ const CONFIG = {
     MESSAGE_MODAL: "message-modal",
     MESSAGE: "message",
     DO_ACTION: "do-action",
+    BACK_TO_ACCOUNT: "back-to-account",
 
 
     // some HTML ids and classes
@@ -67,7 +68,7 @@ const CONFIG = {
 
     // json data file path
     DATA_PATH: "./assets/data/"
-}
+};
 
 /**
  * Redirect to pageName
