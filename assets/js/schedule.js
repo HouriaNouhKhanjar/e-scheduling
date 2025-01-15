@@ -352,7 +352,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const selectedSlots = document.querySelectorAll(`#${CONFIG.RESERVATIONS_LIST} .selected`);
                 // teachers rervations on chosen class 
                 const teacherClassReservation = reservations.teacherClassReservation;
-                // check if the teacher does not exceed the number of classes allocated to the class
+                // check if the teacher does not exceed the number of lessons allocated to the class
                 if (selectedSlots && selectedSlots.length <= teacherClassReservation[CONFIG.REQUIRED_TIME_SLOTS]) {
                     // get the current reservations from storage and compare them with 
                     // the reservation we have, to ensure that no changes occured during the selection process 
@@ -376,9 +376,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         const reservationIndex = currentStorageReservations.findIndex((res) =>
                             res[CONFIG.TEACHER_ID] == loggedinTeacher[CONFIG.ID] && res[CONFIG.CLASS_ID] == chosenClass[CONFIG.ID]);
 
-
                         currentStorageReservations[reservationIndex][CONFIG.TIMES_SLOTS] = newTimeSlotsList;
+
+                        // check if the teacher reached the  number of leasons allocated to the class
+                        currentStorageReservations[reservationIndex][CONFIG.ASSIGNED_COMPLETED] = selectedSlots.length === teacherClassReservation[CONFIG.REQUIRED_TIME_SLOTS];
+                        
                         setItemInStorage(CONFIG.RESERVATIONS, currentStorageReservations);
+
                         // display a message to informe the user that there his changes were successfuly saved 
                         displayMessageModal(`Your changes have been saved successfully.`, true,
                             function () {
@@ -400,7 +404,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
                     }
 
-
                 } else {
                     // display a message to informe the user that he exceed the number of 
                     // required count of lessons
@@ -408,9 +411,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                           Please remove some selections before continue`, false);
                 }
             }
-
-
-            // check if total number of lesons has been reached
 
         });
     }

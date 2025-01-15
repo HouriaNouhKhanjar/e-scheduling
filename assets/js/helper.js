@@ -27,6 +27,7 @@ const CONFIG = {
     REQUIRED_TIME_SLOTS: "required_time_slots",
     DISABLE_MODIFICATION: "disable_modification",
     CAN_DISABLE_MODIFICATION: "can_disable_modification",
+    ASSIGNED_COMPLETED:"assigned_completed",
     DAYS: "days",
     DAY: "day",
     PAGE_NAME: "page_name",
