@@ -376,19 +376,10 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // check if any the loggedin teacher in the storage has been changed,
             // this will be done by opening another tab and logout and login again with another teacher
-            const currentLoggedinTeacher = getItemFromStorage(CONFIG.LOGGED_IN_TEACHER);
-            if (!currentLoggedinTeacher ||
-                currentLoggedinTeacher &&
-                currentLoggedinTeacher[CONFIG.ID] != loggedinTeacher[CONFIG.ID]) {
-
-                displayMessageModal(`The login information has changed. Please return to the
-                                     ${currentLoggedinTeacher &&
-                                     currentLoggedinTeacher[CONFIG.ID]? "account":"start"} page.`,
-                    function () {
-                        redirect(currentLoggedinTeacher &&
-                            currentLoggedinTeacher[CONFIG.ID]? CONFIG.ACCOUNT_PAGE: CONFIG.START_PAGE);
-                    });
-            }
+            const currentLoggedin = checkCurrentLoggedIn(loggedinTeacher);
+            if(!currentLoggedin){
+                console.log();
+            } 
 
             // check if the teacher exceeds the number of classes allocated to the class
 
@@ -400,24 +391,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // check if total number of lesons has been reached
 
         });
-    }
-
-    /**
-     * 
-     * display save modifications result on modal
-     */
-    function displayMessageModal(message, callback) {
-        // display the message modal
-        let messageModal = new bootstrap.Modal(document.getElementById(CONFIG.MESSAGE_MODAL), {});
-        messageModal.show();
-
-        // add the message
-        let messageElement = document.getElementById(CONFIG.MESSAGE);
-        messageElement.innerHTML = message;
-
-        // add event listener to continue button on modal
-        let continueButton = document.getElementById(CONFIG.DO_ACTION);
-        continueButton.addEventListener("click", callback);
     }
 
     /*

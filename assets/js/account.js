@@ -168,14 +168,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // check if any the loggedin teacher in the storage has been changed,
                 // this will be done by opening another tab and logout and login again with another teacher
-                const currentLoggedinTeacher = getItemFromStorage(CONFIG.LOGGED_IN_TEACHER);
-                if (!currentLoggedinTeacher ||
-                    currentLoggedinTeacher &&
-                    currentLoggedinTeacher[CONFIG.ID] != teacher[CONFIG.ID]) {
-
-                    redirect(CONFIG.ACCOUNT_PAGE);
-                    
-                } else {
+                const currentLoggedin = checkCurrentLoggedIn(teacher);
+                if (!currentLoggedin) {
                     //get classes's id from attribute data-class-id
                     const classId = e.target.getAttribute("data-class-id");
                     const classObj = getItemFromStorage(CONFIG.CLASSES).find((cls) => cls[CONFIG.ID] == classId);

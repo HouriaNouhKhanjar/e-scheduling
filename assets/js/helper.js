@@ -27,6 +27,8 @@ const CONFIG = {
     REQUIRED_TIME_SLOTS: "required_time_slots",
     DAYS: "days",
     DAY: "day",
+    PAGE_NAME: "page_name",
+    PAGE: "page",
 
     // pages name
     START_PAGE: "index.html",
@@ -92,22 +94,44 @@ function loginAndClassCheck(callback) {
 }
 
 /**
+ * check if logged in teacher was chanched
+ * compare current logged in teacher from the storage with provided teacher
+ */
+function checkCurrentLoggedIn(teacher, callback) {
+    // get current logged in teacher from storage
+    const currentLoggedinTeacher = getItemFromStorage(CONFIG.LOGGED_IN_TEACHER);
+    // compare between current logged in teacher and the provided teacher
+    if (!currentLoggedinTeacher ||
+        currentLoggedinTeacher &&
+        currentLoggedinTeacher[CONFIG.ID] != teacher[CONFIG.ID]) {
+
+        const isLoggenIn = currentLoggedinTeacher &&
+            currentLoggedinTeacher[CONFIG.ID];
+
+        let result = {};
+        result[CONFIG.PAGE_NAME] = isLoggenIn ? "refresh the account" : "return to start";
+        result[CONFIG.PAGE] = isLoggenIn ? CONFIG.ACCOUNT_PAGE : CONFIG.START_PAGE;
+
+        // display a message to informe the user to redirect to the suitable page
+        displayMessageModal(`The login information has changed. Please
+            ${result[CONFIG.PAGE_NAME]} page.`,
+            function () {
+                redirect(result[CONFIG.PAGE]);
+            });
+
+        // return the result
+        return result;
+    } else {
+        return null;
+    }
+}
+
+/**
  * Save loggedIn teacher in browser storage
  */
 function loggedIn(teacher, pageName, callback) {
     setItemInStorage(CONFIG.LOGGED_IN_TEACHER, teacher);
     callback(pageName);
-}
-
-/**
- * remove more than one item from storage
- */
-function removeItemsFromStorage(keys) {
-    for (let key of keys) {
-        if(getItemFromStorage(key)) {
-            deleteItemFromStorage(key);
-        }
-    }
 }
 
 /**
@@ -121,6 +145,17 @@ function logout(pageName) {
         CONFIG.LOGGED_IN_TEACHER, CONFIG.CLASSES
     ]);
     redirect(pageName);
+}
+
+/**
+ * remove more than one item from storage
+ */
+function removeItemsFromStorage(keys) {
+    for (let key of keys) {
+        if (getItemFromStorage(key)) {
+            deleteItemFromStorage(key);
+        }
+    }
 }
 
 /**
@@ -174,4 +209,27 @@ function fetchJsonFile(fileName) {
 function hideLoader() {
     let loader = document.getElementById(CONFIG.LOADER);
     loader.classList.add(CONFIG.HIDE_CLASS);
+}
+
+
+/**
+ * Display modal with a message and a callback
+ */
+
+/**
+ * 
+ * display save modifications result on modal
+ */
+function displayMessageModal(message, callback) {
+    // display the message modal
+    let messageModal = new bootstrap.Modal(document.getElementById(CONFIG.MESSAGE_MODAL), {});
+    messageModal.show();
+
+    // add the message
+    let messageElement = document.getElementById(CONFIG.MESSAGE);
+    messageElement.innerHTML = message;
+
+    // add event listener to continue button on modal
+    let continueButton = document.getElementById(CONFIG.DO_ACTION);
+    continueButton.addEventListener("click", callback);
 }
