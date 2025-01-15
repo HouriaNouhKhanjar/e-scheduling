@@ -47,6 +47,7 @@ const CONFIG = {
 
     // HTML main sections' id on index, account, schedule pages
     TEACHERS_TABLE: "teachers-table",
+    ADMIN_ACTION_BUTTONS: "admin-action-buttons",
     CLASSES_LIST: "classes-list-section",
     RESERVATIONS_LIST: "reservations-list-section",
     MESSAGE_MODAL: "message-modal",

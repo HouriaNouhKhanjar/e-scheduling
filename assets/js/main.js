@@ -29,7 +29,7 @@
  */
 window.onload = function () {
     //call loginCheck function with loggedin_teacher parameter to check the teacher id in browser storage
-    loginCheck(function(isLoggedIn) {
+    loginCheck(function (isLoggedIn) {
         if (isLoggedIn) {
             //redirect to teacher account, below function is declared in helper.js file
             redirect(CONFIG.ACCOUNT_PAGE);
@@ -108,6 +108,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                     </td>`;
                 teachersTable.appendChild(newRow);
             }
+
+            // add action buttons (reset reservations)
+            addActionButtons();
             //call hideLoader function, which is declared in helper.js file to hide the loader after fetching data 
             hideLoader();
             //add event listener to login button
@@ -117,6 +120,34 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     }
+
+    /**
+     * Add action buttons after teachers table
+     */
+    function addActionButtons() {
+        let actionButtonsElement = document.getElementById(CONFIG.ADMIN_ACTION_BUTTONS);
+        let newButton = document.createElement("button");
+        newButton.classList.add("btn", "action-button");
+        newButton.innerText = "Reset Reservations";
+        actionButtonsElement.appendChild(newButton);
+        // add event listener
+        newButton.addEventListener("click", resetReservations);
+    }
+
+    /**
+     * change the reservations in the storage and get the initial 
+     * data from the reservations.json file
+     */
+    function resetReservations() {
+        // get reservations from  reaservations.json and save the reservations to the storage
+        fetchJsonFile(CONFIG.RESERVATIONS_FILE).then((reservations) => {
+                setItemInStorage(CONFIG.RESERVATIONS, reservations);
+            })
+            .catch((error) => {
+                throw `Unable to fetch data:", ${error}`;
+            });
+    }
+
 
     /**
      * Display Teachers not found message on teachers table
