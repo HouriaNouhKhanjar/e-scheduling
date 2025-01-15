@@ -35,6 +35,7 @@ window.onload = function () {
             redirect(CONFIG.ACCOUNT_PAGE);
         }
     });
+
 }
 
 
@@ -125,27 +126,38 @@ document.addEventListener("DOMContentLoaded", function () {
      * Add action buttons after teachers table
      */
     function addActionButtons(settings, reaservations) {
-        console.log('dd');
+        // check if the admin can disable the modifications 
+        // by checking if all the teachers have reserved thier required lessons
+        const assignedNotCompleted = reaservations.filter((res) => res[CONFIG.ASSIGNED_COMPLETED] === false);
+       
+        if(!(assignedNotCompleted && assignedNotCompleted.length)){
+             settings[CONFIG.CAN_DISABLE_MODIFICATION] = true;
+             setItemInStorage(CONFIG.SETTINGS, settings);
+        }
+
+
         let actionButtonsElement = document.getElementById(CONFIG.ADMIN_ACTION_BUTTONS);
         // add reset button to reset the reservations to the initial state
-        addResetButton(actionButtonsElement);
+        addResetButton(actionButtonsElement, settings);
         // add close modifications button
-        addCloseModificationsButton(actionButtonsElement, settings, reaservations);
+        addCloseModificationsButton(actionButtonsElement, settings);
         // add enable modifications button
-        addEnableModificationsButton(actionButtonsElement, settings, reaservations);
+        addEnableModificationsButton(actionButtonsElement, settings);
 
     }
 
     /**
      * Add reset button HTML element to action buttons
      */
-    function addResetButton(actionButtonsElement) {
+    function addResetButton(actionButtonsElement, settings) {
 
         let newButton = document.createElement("button");
         newButton.classList.add("btn", "action-button", "m-2", "py-2");
         newButton.innerText = "Reset Reservations";
         // add event listener
-        newButton.addEventListener("click", resetReservations); 
+        newButton.addEventListener("click", function () {
+            resetReservations(settings);
+        });
         actionButtonsElement.appendChild(newButton);
     }
 
@@ -153,10 +165,21 @@ document.addEventListener("DOMContentLoaded", function () {
      * change the reservations in the storage and get the initial 
      * data from the reservations.json file
      */
-    function resetReservations() {
+    function resetReservations(settings) {
         // get reservations from  reaservations.json and save the reservations to the storage
         fetchJsonFile(CONFIG.RESERVATIONS_FILE).then((reservations) => {
                 setItemInStorage(CONFIG.RESERVATIONS, reservations);
+
+                // edit the disable_modification in settings to false 
+                settings[CONFIG.CAN_DISABLE_MODIFICATION] = false;
+                settings[CONFIG.DISABLE_MODIFICATION] = false;
+
+                setItemInStorage(CONFIG.SETTINGS, settings);
+
+                displayMessageModal(`The reservations have been reset successfully, please refrech the page.`, true,
+                    function () {
+                        redirect(CONFIG.START_PAGE);
+                    });
             })
             .catch((error) => {
                 throw `Unable to fetch data:", ${error}`;
@@ -166,50 +189,71 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Add close modifications button HTML element to action buttons
      */
-    function addCloseModificationsButton(actionButtonsElement, settings, reaservations) {
+    function addCloseModificationsButton(actionButtonsElement, settings) {
+        // check if close modifications is possible 
+        if (settings[CONFIG.CAN_DISABLE_MODIFICATION] && !settings[CONFIG.DISABLE_MODIFICATION]) {
 
-        let newButton = document.createElement("button");
-        newButton.classList.add("btn", "btn-danger", "m-2", "py-2");
-        newButton.innerText = "Close Modifications";
-        actionButtonsElement.appendChild(newButton);
-        // add event listener
-        newButton.addEventListener("click", function () {
-            closeModifications(settings, reaservations);
-        });
+            let newButton = document.createElement("button");
+            newButton.classList.add("btn", "btn-danger", "m-2", "py-2");
+            newButton.innerText = "Close Modifications";
+            actionButtonsElement.appendChild(newButton);
+            // add event listener
+            newButton.addEventListener("click", function () {
+                closeModifications(settings);
+            });
+        }
     }
 
     /**
      * change the disable_modification in the storage to true
      * 
      */
-    function closeModifications(settings, reaservations) {
-        // update disable_modification to true in the storage
-        setItemInStorage(CONFIG.DISABLE_MODIFICATION, true);
+    function closeModifications(settings) {
 
+        // update disable_modification to true in the storage
+        // edit the disable_modification in settings to false 
+        settings[CONFIG.DISABLE_MODIFICATION] = true;
+
+        setItemInStorage(CONFIG.SETTINGS, settings);
+
+        displayMessageModal(`The modifications have been closed, please refrech the page.`, true,
+            function () {
+                redirect(CONFIG.START_PAGE);
+            });
     }
 
     /**
      * Add enable modifications button HTML element to action buttons
      */
-    function addEnableModificationsButton(actionButtonsElement, settings, reaservations) {
-
-        let newButton = document.createElement("button");
-        newButton.classList.add("btn", "action-button-secondary",  "m-2", "py-2");
-        newButton.innerText = "Enable Modifications";
-        actionButtonsElement.appendChild(newButton);
-        // add event listener
-        newButton.addEventListener("click", function () {
-            enableModifications(settings, reaservations);
-        });
+    function addEnableModificationsButton(actionButtonsElement, settings) {
+        // check if enable modifications is possible 
+        if (settings[CONFIG.DISABLE_MODIFICATION]) {
+            let newButton = document.createElement("button");
+            newButton.classList.add("btn", "action-button-secondary", "m-2", "py-2");
+            newButton.innerText = "Enable Modifications";
+            actionButtonsElement.appendChild(newButton);
+            // add event listener
+            newButton.addEventListener("click", function () {
+                enableModifications(settings);
+            });
+        }
     }
 
     /**
      * change the disable_modification in the storage to true
      * 
      */
-    function enableModifications(settings, reaservations) {
+    function enableModifications(settings) {
         // update disable_modification to true in the storage
-        setItemInStorage(CONFIG.DISABLE_MODIFICATION, false);
+        // edit the disable_modification in settings to false 
+        settings[CONFIG.DISABLE_MODIFICATION] = false;
+
+        setItemInStorage(CONFIG.SETTINGS, settings);
+
+        displayMessageModal(`The modifications have been enabled, please refrech the page.`, true,
+            function () {
+                redirect(CONFIG.START_PAGE);
+            });
 
     }
 
