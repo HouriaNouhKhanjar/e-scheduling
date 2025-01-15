@@ -76,6 +76,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         // reservations from  reaservations.json and save the reservations to the storage
                         fetchJsonFile(CONFIG.RESERVATIONS_FILE).then((reservations) => {
                             setItemInStorage(CONFIG.RESERVATIONS, reservations);
+                            // add action buttons (reset reservations)
+                            addActionButtons(settings, reservations);
                         });
                     });
                 })
@@ -87,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // if we fetch the data before than get the teachers from storage 
             // and fill teachers table
             fillTeachersTable(getItemFromStorage(CONFIG.TEACHERS));
+            addActionButtons(getItemFromStorage(CONFIG.SETTINGS), getItemFromStorage(CONFIG.RESERVATIONS));
         }
     }
 
@@ -108,9 +111,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                     </td>`;
                 teachersTable.appendChild(newRow);
             }
-
-            // add action buttons (reset reservations)
-            addActionButtons();
             //call hideLoader function, which is declared in helper.js file to hide the loader after fetching data 
             hideLoader();
             //add event listener to login button
@@ -124,14 +124,29 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Add action buttons after teachers table
      */
-    function addActionButtons() {
+    function addActionButtons(settings, reaservations) {
+        console.log('dd');
         let actionButtonsElement = document.getElementById(CONFIG.ADMIN_ACTION_BUTTONS);
+        // add reset button to reset the reservations to the initial state
+        addResetButton(actionButtonsElement);
+        // add close modifications button
+        addCloseModificationsButton(actionButtonsElement, settings, reaservations);
+        // add enable modifications button
+        addEnableModificationsButton(actionButtonsElement, settings, reaservations);
+
+    }
+
+    /**
+     * Add reset button HTML element to action buttons
+     */
+    function addResetButton(actionButtonsElement) {
+
         let newButton = document.createElement("button");
-        newButton.classList.add("btn", "action-button");
+        newButton.classList.add("btn", "action-button", "m-2", "py-2");
         newButton.innerText = "Reset Reservations";
-        actionButtonsElement.appendChild(newButton);
         // add event listener
-        newButton.addEventListener("click", resetReservations);
+        newButton.addEventListener("click", resetReservations); 
+        actionButtonsElement.appendChild(newButton);
     }
 
     /**
@@ -146,6 +161,56 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch((error) => {
                 throw `Unable to fetch data:", ${error}`;
             });
+    }
+
+    /**
+     * Add close modifications button HTML element to action buttons
+     */
+    function addCloseModificationsButton(actionButtonsElement, settings, reaservations) {
+
+        let newButton = document.createElement("button");
+        newButton.classList.add("btn", "btn-danger", "m-2", "py-2");
+        newButton.innerText = "Close Modifications";
+        actionButtonsElement.appendChild(newButton);
+        // add event listener
+        newButton.addEventListener("click", function () {
+            closeModifications(settings, reaservations);
+        });
+    }
+
+    /**
+     * change the disable_modification in the storage to true
+     * 
+     */
+    function closeModifications(settings, reaservations) {
+        // update disable_modification to true in the storage
+        setItemInStorage(CONFIG.DISABLE_MODIFICATION, true);
+
+    }
+
+    /**
+     * Add enable modifications button HTML element to action buttons
+     */
+    function addEnableModificationsButton(actionButtonsElement, settings, reaservations) {
+
+        let newButton = document.createElement("button");
+        newButton.classList.add("btn", "action-button-secondary",  "m-2", "py-2");
+        newButton.innerText = "Enable Modifications";
+        actionButtonsElement.appendChild(newButton);
+        // add event listener
+        newButton.addEventListener("click", function () {
+            enableModifications(settings, reaservations);
+        });
+    }
+
+    /**
+     * change the disable_modification in the storage to true
+     * 
+     */
+    function enableModifications(settings, reaservations) {
+        // update disable_modification to true in the storage
+        setItemInStorage(CONFIG.DISABLE_MODIFICATION, false);
+
     }
 
 
