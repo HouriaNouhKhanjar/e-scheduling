@@ -43,7 +43,7 @@ window.onload = function () {
             redirect(CONFIG.START_PAGE);
         }
     });
-}
+};
 
 /**
  * After the documet conetnt loaded, classes data will be fetched and displayed.
@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function displayTeacherName(teacher) {
         let teacherNameElement = document.getElementById(CONFIG.TEACHER_NAME_ELEMENT);
-        let displayedText = "Teacher not found"
+        let displayedText = "Teacher not found";
         if (teacher) {
             displayedText = teacher[CONFIG.TEACHER_USERNAME];
         }

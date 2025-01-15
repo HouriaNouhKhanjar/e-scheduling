@@ -47,7 +47,7 @@ window.onload = function () {
             redirect(CONFIG.ACCOUNT_PAGE);
         }
     });
-}
+};
 
 /**
  * After the documet conetnt loaded, schedule settings and reservations will be fetched and displayed.
@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                        data-teacher="${teacher}" 
                                        data-class="${classObj}">
                                           ${slotType.message}
-                                   </div>`
+                                   </div>`;
             }
             timeSlotsElement.innerHTML = timeSlotsHtml;
 
