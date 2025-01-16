@@ -126,3 +126,25 @@ Google Fonts was used to import the chosen fonts for use in the site.
 
 These fonts would provide a strong balance of readability and professionalism on a scheduling website.
 
+
+### Imagery
+
+I have chosen a representative image for the website on the start page that displays a calendar and a computer to symbolize the transition from the traditional manual method of selecting the time table plan from the calendar to a digitized layout.
+
+
+### Wireframes
+
+Wireframes were created for mobile, tablet and desktop using balsamiq.
+
+![Start Page](documentation/images/start-wireframe.webp)
+
+![Start Page Mobile](documentation/images/start-mobile-wireframe.webp)
+
+![Account Page](documentation/images/teacher-account-wireframe.webp)
+
+![Account Page Mobile](documentation/images/teacher-account-mobile-wireframe.webp)
+
+![Schedule Page](documentation/images/schedule-wireframe.webp)
+
+![Schedule Page Mobile](documentation/images/schedule-mobile-wireframe.webp)
+
