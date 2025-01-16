@@ -1,4 +1,5 @@
 # Project Planning E-Scheduling
+![E-Scheduling shown on a variety of screen sizes](documentation/images/start-page-responsive1.webp)
 Welcome to E-Scheduling – Your Trusted Online Time Scheduling Platform
 
 Visit the deployed site: [E-Scheduling](https://hourianouhkhanjar.github.io/e-scheduling)
@@ -18,6 +19,16 @@ It also helps in reducing human errors and improving time management within scho
   * [User Goal](#user-goal)
   * [Explaining E-Scheduling Idea](#explaining-the-core-idea-process)
   * [User Stories](#user-stories)
+
+* [Design](#design)
+  * [Colour Scheme](#colour-scheme)
+  * [Typography](#typography)
+  * [Imagery](#imagery)
+  * [Wireframes](#wireframes)
+  * [Features](#features)
+    * [Start Page](#start-page)
+    * [Account Page](#account-page)
+    * [Schedule Page](#schedule-page)
 
 
 - - -
@@ -59,7 +70,7 @@ Once the teacher finishes modifying his schedule, he can save the changes. The p
 
 *Note 1: The teacher can make the modification as long as the administrator has not activated the cancellation of the modification.*
 
-*Note 2: The data will be stored using JSON files.*
+*Note 2: The initial data will be stored using JSON files. And all the modifications will be stored in the brorowser storage in this phase*
 
 
 ### Admin Side:
@@ -85,5 +96,33 @@ As mentioned earlier, the main idea of the project is to allow teachers to creat
 5- **Reset all schedules:**
    Allow administrator to reset all schedules to their initial state, i.e., cancel all reservation for teachers.
 
-6- **Disable all schedules:**
+6- **Disable all modifications:**
    Allow administrator to disable the ability to modify the schedules once each teacher has completed their time slots.
+
+
+- - - 
+
+## Design
+
+### Colour Scheme
+
+The colors used on E-scheduling website are often associated with calmness, trust, and focus. It has a soothing effect on the mind, which is ideal for a planing environment.
+
+In my css file I have used variables to declare colours. 
+
+* I have used `#2890D0` as the primary color for main actions.
+* I have used `#57C693` as the secondary color for secondary actions.
+* I have used `#fffbf8` as background color for header and footer.
+* I have used `#b2c1d1` as background color for disabled time slot.
+
+![Color Scheme](documentation/images/thime-color.webp)
+
+### Typography
+
+Google Fonts was used to import the chosen fonts for use in the site.
+
+* I have used the google font [Roboto Mono](https://fonts.google.com/specimen/Roboto+Mono) for headers and body text.
+
+
+These fonts would provide a strong balance of readability and professionalism on a scheduling website.
+
