@@ -148,3 +148,56 @@ Wireframes were created for mobile, tablet and desktop using balsamiq.
 
 ![Schedule Page Mobile](documentation/images/schedule-mobile-wireframe.webp)
 
+
+### Features
+
+The website is contains start page, account page and schedule page.
+
+All Pages on the website are responsive.
+
+#### Start Page
+
+The start page displays the folwing sections:
+
+- **Navbar section:** contains the logo and a login button that when clicked takes the user to the teachers table section.
+
+- **Header section:** contains a simple definition phrase, simple image and a login button that when clicked takes the user to the teachers table section. 
+
+![start page header](documentation/images/start-page-responsive1.webp)
+
+- **Teachers table section:** Each row display teacher name and a login button that when clicked takes the user to the teacher account page. 
+
+![teachers table section](documentation/images/start-page-responsive2.webp)
+
+- **Footer section and contact us form:** contains website's name and the publishing year.
+
+
+#### Account Page
+
+The account page displays the folwing sections:
+
+- **Navbar section:** contains the logo and a logout button that when clicked takes the user to the start page.
+
+- **Header section:** contains a welcome phrase and the teacher name. 
+
+- **classes list section:** Each card displays the class name and modify schedule button that when clicked takes the user to the schedule page. 
+
+![classes list section](documentation/images/account-page-responsive.webp)
+
+- **Footer section and contact us form:** contains website's name and the publishing year.
+
+
+#### Schedule Page
+
+The schedule page displays the folwing sections:
+
+- **Navbar section:** contains the logo and a logout button that when clicked takes the user to the start page.
+
+- **Header section:** contains a phrase that that define the teacher and class. In addition it includes the instructions for modifying the schedule. 
+
+- **classes list section:** Each card displays the class name and modify schedule button that when clicked takes the user to the schedule page. 
+
+![schedule timetable section](documentation/images/schedule-page-responsive.webp)
+
+- **Footer section and contact us form:** contains website's name and the publishing year.
+
