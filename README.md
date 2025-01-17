@@ -110,10 +110,11 @@ The colors used on E-scheduling website are often associated with calmness, trus
 
 In my css file I have used variables to declare colours. 
 
-* I have used `#2890D0` as the primary color for main actions.
+* I have used `#28A7D1` as the primary color for main actions.
 * I have used `#57C693` as the secondary color for secondary actions.
 * I have used `#fffbf8` as background color for header and footer.
 * I have used `#b2c1d1` as background color for disabled time slot.
+* I have used `#222123` and `#ffffff` as text color.
 
 ![Color Scheme](documentation/images/thime-color.webp)
 
@@ -180,7 +181,7 @@ The account page displays the folwing sections:
 
 - **Header section:** contains a welcome phrase and the teacher name. 
 
-- **classes list section:** Each card displays the class name and modify schedule button that when clicked takes the user to the schedule page. 
+- **classes list section:** each card displays the class name and modify schedule button that when clicked takes the user to the schedule page. 
 
 ![classes list section](documentation/images/account-page-responsive.webp)
 
