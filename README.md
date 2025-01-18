@@ -33,6 +33,12 @@ Additionally, it helps reduce human errors and enhances time management within s
   * [Technologies Used](#technologies-used)
       * [Languages Used](#languages-used)
       * [Frameworks, Libraries & Programs Used](#frameworks-libraries--programs-used)
+  
+  * [Deployment & Local Development](#deployment--local-development)
+      * [Deployment](#deployment)
+      * [Local Development](#local-development)
+         * [How to Fork](#how-to-fork)
+         * [How to Clone](#how-to-clone)
 
 
 - - -
@@ -251,7 +257,46 @@ HTML, CSS, Bootstrap, Javascript
 
 * [Am I Responsive?](http://ami.responsivedesign.is/) To show the website image on a range of devices.
 
+
 - - -
+
+## Deployment & Local Development
+
+### Deployment
+
+The site is deployed using GitHub Pages - [E-Scheduling](https://hourianouhkhanjar.github.io/e-scheduling/).
+
+To Deploy the site using GitHub Pages:
+
+1. Login (or signup) to Github.
+2. Go to the repository for this project, [HouriaNouhKhanjar/e-scheduling](https://github.com/HouriaNouhKhanjar/e-scheduling).
+3. Click the settings button.
+4. Select pages in the left hand navigation menu.
+5. From the source dropdown select main branch and press save.
+6. The site has now been deployed, please note that this process may take a few minutes before the site goes live.
+
+### Local Development
+
+#### How to Fork
+
+To fork the repository:
+
+1. Log in (or sign up) to Github.
+2. Go to the repository for this project, [HouriaNouhKhanjar/e-scheduling](https://github.com/HouriaNouhKhanjar/e-scheduling)
+3. Click the Fork button in the top right corner.
+
+#### How to Clone
+
+To clone the repository:
+
+1. Log in (or sign up) to GitHub.
+2. Go to the repository for this project, [HouriaNouhKhanjar/e-scheduling](https://github.com/HouriaNouhKhanjar/e-scheduling)
+3. Click on the code button, select whether you would like to clone with HTTPS, SSH or GitHub CLI and copy the link shown.
+4. Open the terminal in your code editor and change the current working directory to the location you want to use for the cloned directory.
+5. Type 'git clone' into the terminal and then paste the link you copied in step 3. Press enter.
+
+- - -
+
 
 
 
