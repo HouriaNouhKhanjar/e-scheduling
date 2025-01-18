@@ -40,6 +40,12 @@ Additionally, it helps reduce human errors and enhances time management within s
          * [How to Fork](#how-to-fork)
          * [How to Clone](#how-to-clone)
 
+   * [Credits](#credits)
+      * [Code Used](#code-used)
+      * [Content](#content)
+      * [Media](#media)
+      * [Acknowledgments](#acknowledgments)
+
 
 - - -
 
@@ -295,7 +301,41 @@ To clone the repository:
 4. Open the terminal in your code editor and change the current working directory to the location you want to use for the cloned directory.
 5. Type 'git clone' into the terminal and then paste the link you copied in step 3. Press enter.
 
+
 - - -
+
+## Credits
+
+### Code Used
+
+* I used [this Javascript documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript)  to process arrays, such as searching, filtering, and other operations, in addition to handling operations with localStorage.
+
+* I used [this Javascript code](https://www.geeksforgeeks.org/read-json-file-using-javascript/) to fetch Data from Json file.
+
+* I used [this CSS code](https://css-loaders.com/progress/) to diplay a loader while fetching the data.
+
+* I used [this Javascript code](https://www.w3schools.com/howto/howto_js_redirect_webpage.asp) to redirect to another page.
+
+* I used [this Stackoverflow code](https://stackoverflow.com/questions/4025635/how-can-i-change-the-last-component-of-a-url-path) to replace the last component of an url.
+
+* I used [this Bootstrap documentation](https://getbootstrap.com/docs/5.3/components/tooltips/#overview) to display a tooltips on hovering.
+
+
+### Content
+
+All content for the site, such as introduction messages and instructions were written by myself.
+
+### Media
+
+* The main image in start page was taken from [pexels](https://www.pexels.com/).
+
+### Acknowledgments
+
+I would like to acknowledge the following people:
+
+* Jubril Akolade - My Code Institute Mentor.
+
+* The Code Institute Course that prepared me to complete this project in the best possible way..
 
 
 
