@@ -170,6 +170,7 @@ function getItemFromStorage(cname) {
     return JSON.parse(localStorage.getItem(cname));
 }
 
+
 /**
  * Set item in strorage
  */

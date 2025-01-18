@@ -115,7 +115,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         throw `Unable to fetch data:", ${error}`;
                     });
             } else {
-                fillClassesList(teacherClasses, teacher);
+                try {
+                    fillClassesList(teacherClasses, teacher);
+                } catch (error) {
+                    // Handle the error
+                    console.error("An error occurred: ", error);
+                }
             }
 
         } else {

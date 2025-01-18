@@ -87,10 +87,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     throw `Unable to fetch data:", ${error}`;
                 });
         } else {
-            // if we fetch the data before than get the teachers from storage 
-            // and fill teachers table
-            fillTeachersTable(getItemFromStorage(CONFIG.TEACHERS));
-            addActionButtons(getItemFromStorage(CONFIG.SETTINGS), getItemFromStorage(CONFIG.RESERVATIONS));
+            try {
+                // if we fetch the data before than get the teachers from storage 
+                // and fill teachers table
+                fillTeachersTable(getItemFromStorage(CONFIG.TEACHERS));
+                addActionButtons(getItemFromStorage(CONFIG.SETTINGS), getItemFromStorage(CONFIG.RESERVATIONS));
+            } catch (error) {
+                // Handle the error
+                console.error("An error occurred: ", error);
+            }
         }
     }
 
@@ -129,10 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // check if the admin can disable the modifications 
         // by checking if all the teachers have reserved thier required lessons
         const assignedNotCompleted = reaservations.filter((res) => res[CONFIG.ASSIGNED_COMPLETED] === false);
-       
-        if(!(assignedNotCompleted && assignedNotCompleted.length)){
-             settings[CONFIG.CAN_DISABLE_MODIFICATION] = true;
-             setItemInStorage(CONFIG.SETTINGS, settings);
+
+        if (!(assignedNotCompleted && assignedNotCompleted.length)) {
+            settings[CONFIG.CAN_DISABLE_MODIFICATION] = true;
+            setItemInStorage(CONFIG.SETTINGS, settings);
         }
 
 
