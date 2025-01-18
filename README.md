@@ -1,15 +1,14 @@
 # Project Planning E-Scheduling
 ![E-Scheduling shown on a variety of screen sizes](documentation/images/start-page-responsive.webp)
-Welcome to E-Scheduling – Your Trusted Online Time Scheduling Platform
+Welcome to E-Scheduling – Your Reliable Online Time Management Platform.
 
 Visit the deployed site: [E-Scheduling](https://hourianouhkhanjar.github.io/e-scheduling)
 
 ## Project Description
 
-E-Scheduling is a digital tool that helps in creating and organizing lesson timetables in educational institutions. The website provides an easy-to-use interface for manually creating timetables, with the ability to customize lesson times, assign teachers to different classes, and adjust the schedule according to daily requirements. 
+E-Scheduling is a digital tool designed to help create and organize lesson timetables in educational institutions. The website offers an intuitive interface for manually generating timetables, allowing for customization of lesson times, assigning teachers to different classes, and adjusting the schedule based on daily needs.
 
-It also helps in reducing human errors and improving time management within schools or universities, allowing all stakeholders (teachers, students, and administrators) to easily track the schedule across various devices.
-
+Additionally, it helps reduce human errors and enhances time management within schools and universities. All stakeholders—teachers, students, and administrators—can easily track the schedule across various devices.
 - - -
 
 ## CONTENTS
@@ -30,6 +29,10 @@ It also helps in reducing human errors and improving time management within scho
     * [Account Page](#account-page)
     * [Schedule Page](#schedule-page)
   * [Accessibility](#accessibility)
+
+  * [Technologies Used](#technologies-used)
+      * [Languages Used](#languages-used)
+      * [Frameworks, Libraries & Programs Used](#frameworks-libraries--programs-used)
 
 
 - - -
@@ -218,5 +221,38 @@ I have been careful while coding to ensure the website is as user-friendly and a
 ![contrast button](documentation/images/accessibility2.webp)
 ![contrast text](documentation/images/accessibility1.webp)
 ![contrast text](documentation/images/accessibility5.webp)
+
+
+- - - 
+
+## Technologies Used
+
+### Languages Used
+
+HTML, CSS, Bootstrap, Javascript
+
+### Frameworks, Libraries & Programs Used
+
+* [Balsamiq](https://balsamiq.com/) - Used to create wireframes.
+
+* [Git](https://git-scm.com/) - For version control.
+
+* [Github](https://github.com/) - To save and store the files for the website.
+
+* [GitPod](https://gitpod.io/) - IDE used to create the site.
+
+* [Google Fonts](https://fonts.google.com/) - To import the fonts used on the website.
+
+* [Google Developer Tools](https://developers.google.com/web/tools) - To troubleshoot and test features, solve issues with responsiveness and styling.
+
+* [TinyPNG](https://tinypng.com/) To compress images
+
+* [Birme](https://www.birme.net/) To resize images and convert to webp format.
+
+* [Am I Responsive?](http://ami.responsivedesign.is/) To show the website image on a range of devices.
+
+- - -
+
+
 
 
