@@ -1,5 +1,5 @@
 # Project Planning E-Scheduling
-![E-Scheduling shown on a variety of screen sizes](documentation/images/start-page-responsive1.webp)
+![E-Scheduling shown on a variety of screen sizes](documentation/images/start-page-responsive.webp)
 Welcome to E-Scheduling – Your Trusted Online Time Scheduling Platform
 
 Visit the deployed site: [E-Scheduling](https://hourianouhkhanjar.github.io/e-scheduling)
@@ -29,6 +29,7 @@ It also helps in reducing human errors and improving time management within scho
     * [Start Page](#start-page)
     * [Account Page](#account-page)
     * [Schedule Page](#schedule-page)
+  * [Accessibility](#accessibility)
 
 
 - - -
@@ -114,9 +115,9 @@ In my css file I have used variables to declare colours.
 * I have used `#57C693` as the secondary color for secondary actions.
 * I have used `#fffbf8` as background color for header and footer.
 * I have used `#b2c1d1` as background color for disabled time slot.
-* I have used `#222123` and `#ffffff` as text color.
+* I have used `#222123` as text color.
 
-![Color Scheme](documentation/images/thime-color.webp)
+![Color Scheme](documentation/images/theme-color.webp)
 
 ### Typography
 
@@ -164,11 +165,11 @@ The start page displays the folwing sections:
 
 - **Header section:** contains a simple definition phrase, simple image and a login button that when clicked takes the user to the teachers table section. 
 
-![start page header](documentation/images/start-page-responsive1.webp)
+![start page header](documentation/images/start-page-responsive.webp)
 
 - **Teachers table section:** Each row display teacher name and a login button that when clicked takes the user to the teacher account page. 
 
-![teachers table section](documentation/images/start-page-responsive2.webp)
+![teachers table section](documentation/images/start-page-responsive-2.webp)
 
 - **Footer section and contact us form:** contains website's name and the publishing year.
 
@@ -194,11 +195,28 @@ The schedule page displays the folwing sections:
 
 - **Navbar section:** contains the logo and a logout button that when clicked takes the user to the start page.
 
-- **Header section:** contains a phrase that that define the teacher and class. In addition it includes the instructions for modifying the schedule. 
-
-- **classes list section:** Each card displays the class name and modify schedule button that when clicked takes the user to the schedule page. 
-
+- **Header section:** contains a phrase that define the teacher and class. In addition it includes the instructions for modifying the schedule. 
 ![schedule timetable section](documentation/images/schedule-page-responsive.webp)
 
+- **time slots section:** displays time slots table. 
+![schedule timetable section](documentation/images/schedule-page-responsive2.webp)
+
+
 - **Footer section and contact us form:** contains website's name and the publishing year.
+
+
+### Accessibility
+
+I have been careful while coding to ensure the website is as user-friendly and accessible as possible. This has been accomplished by:
+
+* Using semantic HTML.
+* Implementing a hover state on all buttons across the site, I made sure it is clear to the user when they are hovering over a button.
+* Making sure there is adequate color contrast throughout the site to enhance readability and accessibility.
+
+![contrast button](documentation/images/accessibility3.webp)
+![contrast button](documentation/images/accessibility4.webp)
+![contrast button](documentation/images/accessibility2.webp)
+![contrast text](documentation/images/accessibility1.webp)
+![contrast text](documentation/images/accessibility5.webp)
+
 
