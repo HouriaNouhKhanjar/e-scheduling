@@ -122,8 +122,8 @@ Each device tested the site using the following browsers:
 
 | Feature | Expected Outcome | Testing Performed | Result | Pass/Fail | Image |
 | --- | --- | --- | --- | --- | --- |
-| The Sites logo | Link directs the user back to the start page if not loggedin, otherwise directs the user to the account page. | Clicked logo | Start page reloads after checking the local storage value of loggedin_teacher, If not null reloads the account page. | Pass | |
-| The Logein button on Navbar | Displays teachers table on start page | Clicked button | The window scrolls to teachers table section on start page. | Pass | |
+| The Sites logo | Link reloads the start page if not loggedin, otherwise directs the user to the account page. | Clicked logo | Start page reloades after checking the local storage value of "loggedin_teacher". If the value of "loggedin_teacher" not null redirects to the account page. | Pass | |
+| The Logein button on the navbar | Displays teachers table on start page | Clicked button | The window scrolls to teachers table section on start page. | Pass | |
 | The Logein button on Hero section |  Displays teachers table on start page | Clicked on button | The window scrolls to teachers table section on start page.  | Pass | |
 | Each login button in teachers table | Stores loggedin_teacher in local storage and redirect to account page  | Clicked on button | Stores the loggedin teacher data in the storage then loads the account page | Pass | ![Loggedin_teacher value in local storage after log in](./images/loggedin-teacher.webp) |
 | The reset reservations buttton | Resets the reservations in the local storage to its initial state and display a success messgae | Clicked on button | fetchs the reservations from Json file and restores the fetched data in the storage then displays a message modal | Pass |  ![Success message displayed after clicking and reseting the reservations](./images/reset-reservations-message.webp) |
@@ -137,3 +137,13 @@ Each device tested the site using the following browsers:
 
 <br>
 <br>
+
+`Account Page`
+
+| Feature | Expected Outcome | Testing Performed | Result | Pass/Fail | Image |
+| --- | --- | --- | --- | --- | --- |
+| The Sites logo | Reloads the account page if loggedin, otherwise directs the user to the start page. | Clicked logo | Account page reloads after checking the local storage value of loggedin_teacher. If the value of "loggedin_teacher" is null reloads the start page. | Pass | |
+| The Logout button on the navbar | Removes "loggedin_teacher" from local storage and redirects to start page.  | Clicked on button | removes the loggedin teacher data from the storage then redirects to the start page. | Pass | |
+| The modify schedule button on the class card | If the login data hasn't been changed, stores "chosen_class" in local storage and redirects to schedule page.  Otherwise refreshs the page.  | Clicked on button | Checks the "loggedin_teacher" in the local storage, if not changed then, it stores the "chosen_class" in the local storage and redirects to schedule page. If the loggin data in the local storage has been changed, then displays a message modal in order to refrech the page| Pass | ![Logged in has been changed message](./images/loggedin-data-changed.webp) |
+| The continue buttton on message modal | Refreshs the page. | Clicked on button |  reloads the start page if loggedin, otherwise reloads account page. | Pass | |
+| Button hover | Shows an eye-catching effect to the user when the mouse approaches the button | Button hovering | Chanes button style such as background or text color | Pass | ![Hovering Effect on modify schedule button](./images/modify-schedule-hover.webp) |
