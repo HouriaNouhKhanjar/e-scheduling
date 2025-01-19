@@ -4,7 +4,7 @@
 
 - **Feature Title:** Create JSON files
 
-- **User Story:** As a system, I must save the data in a file or repository so that I can work with, check, and process it.
+- **User Story:** As a system, I must fetch the initial data from a repository so that I can work with, check, and process it.
 
 - **Acceptance Criteria:** 
 
@@ -95,7 +95,7 @@
 
 - **Feature Title:** Sign out
 
-- **User Story:** As a system administrator, I can sign out of a teacher account to enable another teacher account to log in.
+- **User Story:** As a teacher, I can sign out of a teacher account to enable another teacher account to log in.
 
 - **Acceptance Criteria:** 
 

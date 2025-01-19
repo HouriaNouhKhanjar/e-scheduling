@@ -111,7 +111,7 @@ As mentioned earlier, the main idea of the project is to allow teachers to creat
 
 4- **Sign out:**
    The administrator is allowed to sign out of a teacher's account in order to login with another teacher's account. 
-   *It is important to note that the administrator can login with different teacher accounts from different browsers.*
+   *It is important to note that the administrator can login with different teacher accounts.*
 
 5- **Reset all schedules:**
    Allow administrator to reset all schedules to their initial state, i.e., cancel all reservation for teachers.
