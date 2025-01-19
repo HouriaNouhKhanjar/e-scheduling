@@ -117,3 +117,23 @@ Each device tested the site using the following browsers:
 
 * Google Chrome
 * Safari
+
+`Start Page`
+
+| Feature | Expected Outcome | Testing Performed | Result | Pass/Fail | Image |
+| --- | --- | --- | --- | --- | --- |
+| The Sites logo | Link directs the user back to the start page if not loggedin, otherwise directs the user to the account page. | Clicked logo | Start page reloads after checking the local storage value of loggedin_teacher, If not null reloads the account page. | Pass | |
+| The Logein button on Navbar | Displays teachers table on start page | Clicked button | The window scrolls to teachers table section on start page. | Pass | |
+| The Logein button on Hero section |  Displays teachers table on start page | Clicked on button | The window scrolls to teachers table section on start page.  | Pass | |
+| Each login button in teachers table | Stores loggedin_teacher in local storage and redirect to account page  | Clicked on button | Stores the loggedin teacher data in the storage then loads the account page | Pass | ![Loggedin_teacher value in local storage after log in](./images/loggedin-teacher.webp) |
+| The reset reservations buttton | Resets the reservations in the local storage to its initial state and display a success messgae | Clicked on button | fetchs the reservations from Json file and restores the fetched data in the storage then displays a message modal | Pass |  ![Success message displayed after clicking and reseting the reservations](./images/reset-reservations-message.webp) |
+| The continue buttton on reset message modal | Reloads the Start page. | Clicked on button | reloads the start page. | Pass | |
+| The close modifications button | Disables the modifications of schedules and the "Enable Modifications" button will appear. | Clicked on button | Changes "disable_modification" value in local storage to true and displays the "Enable Modifications" button instead of "Close Modifications" button and displays the success message modal. In addition disables the "Save Modifications" button on Schedule page.| Pass |  ![Success message diplayed after clicking on close modifications and the Enable Modifications button appeard](./images/close-modifications-message.webp) ![The value of "disable_modification" in the local storage changed](./images/close-modifications-storage.webp)|
+| The continue buttton on close modifications message modal | Reloads the Start page. | Clicked on button | reloads the start page. | Pass | |
+| The enable modifications button | Reenables the modifications of schedules and the "Enable Modifications" button will diappear. | Clicked on button | Changes "disable_modification" value in local storage to false and displays the "Close Modifications" button instead of "Enable Modifications" button and displays the success message modal. In addition enables the "Save Modifications" button on Schedule page. | Pass | ![Success message diplayed after clicking on enable modifications and the Close Modifications button appeard](./images/enabled-message.webp) |
+| The continue buttton on enable modifications message modal | Reloads the Start page. | Clicked on button | reloads the start page. | Pass | |
+| Button hover | Shows an eye-catching effect to the user when the mouse approaches the button | Button hovering | Chanes button style such as background or text color | Pass | ![Hovering Effect on login button](./images/button-hovering.webp) |
+
+
+<br>
+<br>
