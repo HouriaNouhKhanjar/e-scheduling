@@ -33,6 +33,10 @@ Additionally, it helps reduce human errors and enhances time management within s
   * [Technologies Used](#technologies-used)
       * [Languages Used](#languages-used)
       * [Frameworks, Libraries & Programs Used](#frameworks-libraries--programs-used)
+
+   * [Testing](#testing)
+      * [Solved Bugs](#solved-bugs)
+      * [Known Bugs](#known-bugs)
   
   * [Deployment & Local Development](#deployment--local-development)
       * [Deployment](#deployment)
@@ -263,6 +267,16 @@ HTML, CSS, Bootstrap, Javascript
 
 * [Am I Responsive?](http://ami.responsivedesign.is/) To show the website image on a range of devices.
 
+
+- - -
+
+## Testing
+
+Please refer to [TESTING.md](documentation/TESTING.md) file for all testing carried out.
+
+### Solved Bugs
+
+### Known Bugs
 
 - - -
 
