@@ -275,8 +275,35 @@ HTML, CSS, Bootstrap, Javascript
 Please refer to [TESTING.md](documentation/TESTING.md) file for all testing carried out.
 
 ### Solved Bugs
+| No | Bug | How I solved the issue |
+| :--- | :--- | :--- |
+| 1 | An error occurred when validating the HTML code of start page, because I used a div inside a table row. This div is for the loader(div#loader).  | I moved the div outside the table While maintaining the same desired result. |
+| 1 | Error getting items from the local storage using wrong key name. This error occurred when adding the code to determine the state of a time slot (disabled, selected). | I declared a const object(CONFIG) that contains all used keys, file names and page names. |
+
 
 ### Known Bugs
+
+* If the user manually deletes the teachers' information saved in the local storage and then wants to log in, an error will appear in the browser console and the user will not be transferred to the account page.
+ 
+ ![Deleting the teachers from local storage manually](documentation/images/error1.webp)
+ 
+ ![Console error after deleting the teachers from local storage manually](documentation/images/error.webp)
+
+ ![After clicking on login to teacher account, It does not go to the account page](documentation/images/error2.webp)
+
+
+ * If the user manually deletes the reservations' information saved in the local storage and then wants to modify a schedule, an error will appear in the browser console and the time table will not be displayed and ther loader will be visible.
+ 
+ ![Deleting the reservations from local storage manually](documentation/images/error5.webp)
+
+  ![Clicking on modify schedule button on account page](documentation/images/error6.webp)
+ 
+ ![Console error after loading the schedule page](documentation/images/error4.webp)
+
+ ![Time slots dosn't displayed and the loader is visible](documentation/images/error3.webp)
+  
+
+
 
 - - -
 
